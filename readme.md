@@ -99,13 +99,11 @@ Orion as example again: [Constellation Page](http://vizier.cfa.harvard.edu/viz-b
 069.2500   0.0000
 ```
 
-The end goal will complete the night sky similar to the current designations.
+The end goal will complete the night sky similar to the current designations for different night skies throughout history.
 
 ![sky](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Constellations_ecliptic_equirectangular_plot.svg/512px-Constellations_ecliptic_equirectangular_plot.svg.png 'Constellations ecliptic equirectangular plot')
 
 [Detailed view here](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Constellations_ecliptic_equirectangular_plot.svg/1000px-Constellations_ecliptic_equirectangular_plot.svg.png).
-
-
 
 #Eons
 When I say eons, maybe I should tone it down to less than a million, but I'd like to think that the first hominids looked at the night sky in the early Miocene, 22 million years ago. If not, then at least by the end of the epoch 5 million years ago when apes were diversified enough to distinctly call some pre-human. It was recently found that [dung beetles watch the sky](http://www.sciencedirect.com/science/article/pii/S0960982212015072), so why not?
@@ -149,6 +147,15 @@ Also, see:
 
 * [88 modern constellations in different languages](https://en.wikipedia.org/wiki/88_modern_constellations_in_different_languages).
 * [former constellations](https://en.wikipedia.org/wiki/Former_constellations)
+
+#Notebooks
+For the moment, progress will be logged in the [notebooks](https://github.com/digitalvapor/asterisms/tree/master/notebooks) folder in the form of [IPython Notebooks](https://github.com/ipython/ipython).
+
+To run, `ipython notebook`.
+
+* [draw bounds](https://github.com/digitalvapor/asterisms/blob/master/notebooks/draw-bounds.ipynb) - Input IAU format constellation region points and output a constellation polygon. ![orion](notebooks/orion.png 'orion constellation')
+* [proper motion](https://github.com/digitalvapor/asterisms/blob/master/notebooks/proper-motion.ipynb) - The change of α Ursa Major 100000 years from now. ![alphaUM](notebooks/alphaUM.png 'alpha ursa major')
+* [stars](https://github.com/digitalvapor/asterisms/blob/master/notebooks/stars.ipynb) - An equirectangular plot of the stars, assign magnitude, and color spectrum. ![orion stars](notebooks/stars.png 'orion constellation')
 
 #Fork
 Please feel free to contribute by forking, or make a [issue](https://github.com/digitalvapor/asterisms/issues). Be a coding historical [celestial cartographer](https://en.wikipedia.org/wiki/Celestial_cartography).
