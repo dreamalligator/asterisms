@@ -162,6 +162,7 @@ To run, `ipython notebook`.
 * [mini-hipparcos](https://github.com/digitalvapor/asterisms/blob/master/notebooks/mini-hipparcos.ipynb) - Take a largish [Hipparcos](https://en.wikipedia.org/wiki/Hipparcos) database and minify it for use with the asterisms by [H. A. Rey](https://en.wikipedia.org/wiki/H._A._Rey). File reduced to 0.671% for 792 stars out of an original 117955. Also, discover we are missing [ksi UMa](https://en.wikipedia.org/wiki/Xi_Ursae_Majoris) in the [hip2.dat](https://pystaratlas.googlecode.com/files/hip2.dat) catalog.
 * [proper motion](https://github.com/digitalvapor/asterisms/blob/master/notebooks/proper-motion.ipynb) - The change of α Ursa Major 100000 years from now. ![alphaUM](notebooks/alphaUM.png 'alpha ursa major')
 * [stars](https://github.com/digitalvapor/asterisms/blob/master/notebooks/stars.ipynb) - An equirectangular plot of the stars, assign magnitude, and color spectrum. ![orion stars](notebooks/stars.png 'orion constellation')
+* [curious asterisms](https://github.com/digitalvapor/asterisms/blob/master/notebooks/curious-asterisms.ipynb) - asterisms by [H. A. Rey](https://en.wikipedia.org/wiki/H._A._Rey), the creator of Curious George. Here is Gemeni holding hands. ![gemeni](notebooks/gemeni.png 'gemeni holding hands')
 
 #Fork
 Please feel free to contribute by forking, or make a [issue](https://github.com/digitalvapor/asterisms/issues). Be a coding historical [celestial cartographer](https://en.wikipedia.org/wiki/Celestial_cartography).
