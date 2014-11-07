@@ -118,7 +118,7 @@ So, there's a lot to cover, but you've got to start somewhere, so let's start wi
 Some night skies by culture:
 
 * [Australian Aboriginal](https://en.wikipedia.org/wiki/Australian_Aboriginal_astronomy)
-* [Babylonian](https://en.wikipedia.org/wiki/Babylonian_star_catalogues)
+* Chakavian-Kaykavian
 * [Chechen (Nakh)](https://en.wikipedia.org/wiki/Nakh_peoples#Cosmology_and_creation)
 * [Chinese](https://en.wikipedia.org/wiki/Chinese_constellations)
 * [Egyptian](https://en.wikipedia.org/wiki/Egyptian_astronomy)
@@ -126,7 +126,10 @@ Some night skies by culture:
 * [Hindu](https://en.wikipedia.org/wiki/Hindu_astrology) / [Indian](https://en.wikipedia.org/wiki/Indian_astronomy)
 * Incan
 * [Inuit](https://en.wikipedia.org/wiki/Inuit_astronomy)
+* Korean
+* [Maori]()
 * [Medieval Islam](https://en.wikipedia.org/wiki/Astronomy_in_medieval_Islam)
+* Mesopotamian ([Babylonian](https://en.wikipedia.org/wiki/Babylonian_star_catalogues)-Assyrian-Sumerian)
 * Native American
 * Nordic
 * Sumerian
@@ -138,8 +141,10 @@ Some night sky works, by date:
 * [Poeticon astronomicon](https://en.wikipedia.org/wiki/Poeticon_astronomicon)  attributed to [Hyginus](https://en.wikipedia.org/wiki/Hyginus) (~1 CE)
 * [Almagest](https://en.wikipedia.org/wiki/Almagest) by [Ptolemy](https://en.wikipedia.org/wiki/Ptolemy) (100-178 CE)
 * [Book of Fixed Stars](https://en.wikipedia.org/wiki/Book_of_Fixed_Stars) by [al-Sufi](https://en.wikipedia.org/wiki/Abd_al-Rahman_al-Sufi) (964)
+* [Cheonsang Yeolcha Bunyajido](https://en.wikipedia.org/wiki/Cheonsang_Yeolcha_Bunyajido) (1395)
 * [hemispheres](http://www.ianridpath.com/startales/durer.htm) by [Dürer](https://en.wikipedia.org/wiki/Albrecht_D%C3%BCrer) (1515)
 * Astronomiæ Instauratæ Progymnasmata by [Tycho Brahe](https://en.wikipedia.org/wiki/Tycho_Brahe) (1588)
+* [Uranometria Omnium Asterismorum](https://en.wikipedia.org/wiki/Uranometria) by [Bayer](https://en.wikipedia.org/wiki/Johann_Bayer) (1603)
 * [Rudolphine Tables](https://en.wikipedia.org/wiki/Rudolphine_Tables) by [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler) (1627)
 * [Prodromus Astronomiae](https://en.wikipedia.org/wiki/Prodromus_Astronomiae) by [Johannes Hevelius](https://en.wikipedia.org/wiki/Johannes_Hevelius) (1690)
 
@@ -154,6 +159,7 @@ For the moment, progress will be logged in the [notebooks](https://github.com/di
 To run, `ipython notebook`.
 
 * [draw bounds](https://github.com/digitalvapor/asterisms/blob/master/notebooks/draw-bounds.ipynb) - Input IAU format constellation region points and output a constellation polygon. ![orion](notebooks/orion.png 'orion constellation')
+* [mini-hipparcos](https://github.com/digitalvapor/asterisms/blob/master/notebooks/mini-hipparcos.ipynb) - Take a largish [Hipparcos](https://en.wikipedia.org/wiki/Hipparcos) database and minify it for use with the asterisms by [H. A. Rey](https://en.wikipedia.org/wiki/H._A._Rey). File reduced to 0.671% for 792 stars out of an original 117955. Also, discover we are missing [ksi UMa](https://en.wikipedia.org/wiki/Xi_Ursae_Majoris) in the [hip2.dat](https://pystaratlas.googlecode.com/files/hip2.dat) catalog.
 * [proper motion](https://github.com/digitalvapor/asterisms/blob/master/notebooks/proper-motion.ipynb) - The change of α Ursa Major 100000 years from now. ![alphaUM](notebooks/alphaUM.png 'alpha ursa major')
 * [stars](https://github.com/digitalvapor/asterisms/blob/master/notebooks/stars.ipynb) - An equirectangular plot of the stars, assign magnitude, and color spectrum. ![orion stars](notebooks/stars.png 'orion constellation')
 
