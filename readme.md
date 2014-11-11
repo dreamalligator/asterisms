@@ -127,7 +127,7 @@ Some night skies by culture:
 * Incan
 * [Inuit](https://en.wikipedia.org/wiki/Inuit_astronomy)
 * Korean
-* [Maori]()
+* Maori
 * [Medieval Islam](https://en.wikipedia.org/wiki/Astronomy_in_medieval_Islam)
 * Mesopotamian ([Babylonian](https://en.wikipedia.org/wiki/Babylonian_star_catalogues)-Assyrian-Sumerian)
 * Native American
@@ -138,20 +138,30 @@ Some night skies by culture:
 Some night sky works, by date:
 
 * [Vedanga Jyotisha](https://en.wikipedia.org/wiki/Vedanga_Jyotisha) by Lagadha (1400-1200 BCE)
+* Iliad, Odyssey by Homer (~ 700 BC)
+* Works and Days, Astronomy attributed to Hesiod (~700 BC)
+* Eudoxus
+* Aratus
 * [Poeticon astronomicon](https://en.wikipedia.org/wiki/Poeticon_astronomicon)  attributed to [Hyginus](https://en.wikipedia.org/wiki/Hyginus) (~1 CE)
 * [Almagest](https://en.wikipedia.org/wiki/Almagest) by [Ptolemy](https://en.wikipedia.org/wiki/Ptolemy) (100-178 CE)
+* [Dunhuang star chart](https://en.wikipedia.org/wiki/Dunhuang_Star_Chart) 618–907 AD
 * [Book of Fixed Stars](https://en.wikipedia.org/wiki/Book_of_Fixed_Stars) by [al-Sufi](https://en.wikipedia.org/wiki/Abd_al-Rahman_al-Sufi) (964)
 * [Cheonsang Yeolcha Bunyajido](https://en.wikipedia.org/wiki/Cheonsang_Yeolcha_Bunyajido) (1395)
-* [hemispheres](http://www.ianridpath.com/startales/durer.htm) by [Dürer](https://en.wikipedia.org/wiki/Albrecht_D%C3%BCrer) (1515)
+* [hemispheres](http://www.ianridpath.com/startales/durer.htm) by [Albrecht Dürer](https://en.wikipedia.org/wiki/Albrecht_D%C3%BCrer) (1515)
 * Astronomiæ Instauratæ Progymnasmata by [Tycho Brahe](https://en.wikipedia.org/wiki/Tycho_Brahe) (1588)
+* Petrus Plancius (~ 1600)
+* Pieter Dirkszoon Keyser and Frederick de Houtman (~ 1600)
 * [Uranometria Omnium Asterismorum](https://en.wikipedia.org/wiki/Uranometria) by [Bayer](https://en.wikipedia.org/wiki/Johann_Bayer) (1603)
 * [Rudolphine Tables](https://en.wikipedia.org/wiki/Rudolphine_Tables) by [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler) (1627)
 * [Prodromus Astronomiae](https://en.wikipedia.org/wiki/Prodromus_Astronomiae) by [Johannes Hevelius](https://en.wikipedia.org/wiki/Johannes_Hevelius) (1690)
+* Nicolas Louis de Lacaille (1754)
+* Uranographia by Johann Elert Bode (1801)
 
 Also, see:
 
 * [88 modern constellations in different languages](https://en.wikipedia.org/wiki/88_modern_constellations_in_different_languages).
 * [former constellations](https://en.wikipedia.org/wiki/Former_constellations)
+* Ian Ridpath's [Pictures in the sky: the origin and history of constellations](https://www.youtube.com/watch?v=nZm-QaKqS-Y). See [t=1379](https://www.youtube.com/watch?v=nZm-QaKqS-Y#t=1379) for depiction of Transmission of the constellations from their origin up to the 16th century.
 
 #Notebooks
 For the moment, progress will be logged in the [notebooks](https://github.com/digitalvapor/asterisms/tree/master/notebooks) folder in the form of [IPython Notebooks](https://github.com/ipython/ipython).
