@@ -30,7 +30,7 @@ HH MM SS.SSSS| DD.DDDDDDD|XXX
 
 The end goal will complete the night sky similar to the current designations for different night skies throughout history. Here is an example of the current IAU bounds, see [below](#notebooks) for more examples.
 
-![family](notebooks/bounds_family.png 'iau constellation bounds by family')
+![family](notebooks/images/bounds_family.png 'iau constellation bounds by family')
 
 The structure I am thinking all constellations and asterisms will use for this project is the following. Where the third field is the endonym of the asterism if applicable.
 
@@ -111,14 +111,14 @@ For the moment, progress will be logged in the [notebooks](https://github.com/di
 
 To run, `ipython notebook`.
 
-* [draw bounds](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/draw-bounds.ipynb) - Input IAU format constellation region points and output a constellation polygon. ![orion](notebooks/orion.png 'orion constellation')
-* [iau bounds](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/iau-bounds.ipynb) -  A method to plot all IAU constellation bounds. The algorithms amend wrapping discontinuities and account for the poles. Also added functionality to group the constellations and color the polygons. ![family](notebooks/bounds_family.png 'iau constellation bounds by family') ![time](notebooks/bounds_time.png 'iau constellation bounds by time')
+* [draw bounds](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/draw-bounds.ipynb) - Input IAU format constellation region points and output a constellation polygon. ![orion](notebooks/images/orion.png 'orion constellation')
+* [iau bounds](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/iau-bounds.ipynb) -  A method to plot all IAU constellation bounds. The algorithms amend wrapping discontinuities and account for the poles. Also added functionality to group the constellations and color the polygons. ![family](notebooks/images/bounds_family.png 'iau constellation bounds by family') ![time](notebooks/images/bounds_time.png 'iau constellation bounds by time')
 * [mini-hipparcos](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/mini-hipparcos.ipynb) - Take a largish [Hipparcos](https://en.wikipedia.org/wiki/Hipparcos) database and minify it for use with the asterisms by [H. A. Rey](https://en.wikipedia.org/wiki/H._A._Rey). File reduced to 0.671% for 792 stars out of an original 117955. Also, discover we are missing [ksi UMa](https://en.wikipedia.org/wiki/Xi_Ursae_Majoris) in the [hip2.dat](https://pystaratlas.googlecode.com/files/hip2.dat) catalog.
-* [proper motion](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/proper-motion.ipynb) - The change of α Ursa Major 100000 years from now. ![alphaUM](notebooks/alphaUM.png 'alpha ursa major')
-* [stars](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/stars.ipynb) - An equirectangular plot of the stars, assign magnitude, and color spectrum. ![orion stars](notebooks/stars.png 'orion constellation')
-* [curious asterisms](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/curious-asterisms.ipynb) - asterisms by [H. A. Rey](https://en.wikipedia.org/wiki/H._A._Rey), the creator of Curious George. Here is Gemeni holding hands. ![gemeni](notebooks/gemeni.png 'gemeni holding hands')
+* [proper motion](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/proper-motion.ipynb) - The change of α Ursa Major 100000 years from now. ![alphaUM](notebooks/images/alphaUM.png 'alpha ursa major')
+* [stars](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/stars.ipynb) - An equirectangular plot of the stars, assign magnitude, and color spectrum. ![orion stars](notebooks/images/stars.png 'orion constellation')
+* [curious asterisms](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/curious-asterisms.ipynb) - asterisms by [H. A. Rey](https://en.wikipedia.org/wiki/H._A._Rey), the creator of Curious George. Here is Gemeni holding hands. ![gemeni](notebooks/images/gemeni.png 'gemeni holding hands')
 * [far-flung-proper-motion](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/far-flung-proper-motion.ipynb) - some discussion on long-term precession models.
-* [vondrak](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/vondrak.ipynb) - Translated Vondrák's precession model to Python. Create a precession matrix and implement it. Here is the precession of Polaris over 400000 years. ![polaris_ltp](notebooks/polaris_long_term.png 'Long term precession of Polaris over 400000 years')
+* [vondrak](http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/vondrak.ipynb) - Translated Vondrák's precession model to Python. Create a precession matrix and implement it. Here is the precession of Polaris over 400000 years. ![polaris_ltp](notebooks/images/polaris_long_term.png 'Long term precession of Polaris over 400000 years')
 
 #Fork
 Please feel free to contribute by forking, or make a [issue](https://github.com/digitalvapor/asterisms/issues). Be a coding historical [celestial cartographer](https://en.wikipedia.org/wiki/Celestial_cartography).
