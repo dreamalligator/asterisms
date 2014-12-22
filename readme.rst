@@ -126,7 +126,14 @@ Notebooks
 =========
 For the moment, progress will be logged in the `notebooks <https://github.com/digitalvapor/asterisms/tree/master/notebooks>`_ folder in the form of `IPython Notebooks <https://github.com/ipython/ipython>`_. You can `view them with nbviewer <http://nbviewer.ipython.org/github/digitalvapor/asterisms/tree/master/notebooks/>`_.
 
-To run, ``ipython notebook``.
+To run, ``ipython notebook`` in either the ``notebooks`` or ``docs`` folder.
+
+Examples
+--------
+`examples <http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/asterisms/docs/examples.ipynb>`_ - Examples using the Asterisms project.
+
+* Find the visual barycenter of a constellation.
+* Create a constellation and precess it thousands of years.
 
 Draw Bounds
 -----------
