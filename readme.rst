@@ -176,7 +176,7 @@ Far-flung Proper Motion
 
 Vondrak
 -------
-`vondrak <http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/vondrak.ipynb>`_ - Translated Vondrák's precession model to Python. Create a precession matrix and implement it. Here is the precession of Polaris over 400000 years. I also released this `Vondrak code <https://github.com/digitalvapor/vondrak/>`_ as a standalone Python package. See `https://digitalvapor.github.io/vondrak`_.
+`vondrak <http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/vondrak.ipynb>`_ - Translated Vondrák's precession model to Python. Create a precession matrix and implement it. Here is the precession of Polaris over 400000 years. I also released this `Vondrak code <https://github.com/digitalvapor/vondrak/>`_ as a standalone Python package. See the documentation at `https://digitalvapor.github.io/vondrak <https://digitalvapor.github.io/vondrak>`_.
 
 .. image:: notebooks/images/polaris_long_term.png
     :alt: Long term precession of Polaris over 400000 years
