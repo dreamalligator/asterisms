@@ -43,14 +43,13 @@ decisions to the Skyfield project, which I am going to leverage.
     using Skyfield version 0.4
 
 
-Barycenter
-----------
+Visual Center
+-------------
 
-This example shows how to calculate the barycenter (equally weighted) of
-a list of stars with both Skyfield and Asterisms. This could be useful
-if you wanted to point a telescope, or a celestrial mapping program, to
-the center of a constellation. I like to think of it as a visual
-barycenter.
+This example shows how to calculate the visual center (unweighted) of a
+list of stars with Asterisms. This could be useful if you wanted to
+point a telescope, or a celestrial mapping program, to the center of a
+constellation. I like to think of it as a visual barycenter.
 
 .. code:: python
 
@@ -68,57 +67,19 @@ barycenter.
     for star in stars:
         star_pos = earth(now()).observe(star)
         positions.append(star_pos.radec())
-    position_array = array(positions)
-    print('Array of Positions')
-    print(position_array)
+    print(positions)
+    a.center(positions)
 
 .. parsed-literal::
 
-    Array of Positions
-    [[<Angle 03h 08m 10.13s> <Angle +40deg 57' 20.3"> <Distance 2.06265e+14 AU>]
-     [<Angle 13h 23m 55.50s> <Angle +54deg 55' 31.0"> <Distance 2.06265e+14 AU>]
-     [<Angle 18h 36m 56.34s> <Angle +38deg 47' 01.3"> <Distance 2.06265e+14 AU>]]
+    [(<Angle 03h 08m 10.13s>, <Angle +40deg 57' 20.3">, <Distance 2.06265e+14 AU>), (<Angle 13h 23m 55.50s>, <Angle +54deg 55' 31.0">, <Distance 2.06265e+14 AU>), (<Angle 18h 36m 56.34s>, <Angle +38deg 47' 01.3">, <Distance 2.06265e+14 AU>)]
 
-
-How to get the visual Barycenter just using Skyfield
-
-.. code:: python
-
-    # Average the coordinates to get an unweighted center
-    mean_ra = skyfield.units.Angle(hours=0.0).radians
-    mean_dec = skyfield.units.Angle(degrees=0.0).radians
-    mean_dist = skyfield.units.Distance(AU=0.0).AU
-    for coord in position_array:
-        mean_ra = mean_ra + coord[0].radians
-        mean_dec = mean_dec + coord[1].radians
-        mean_dist = mean_dist + coord[2].AU
-    mean_ra = mean_ra / len(position_array)
-    mean_dec = mean_dec / len(position_array)
-    mean_dist = mean_dist / len(position_array)
-    
-    center = (Angle(radians=mean_ra, preference='hours'), Angle(radians=mean_dec, signed=True), Distance(AU=mean_dist))
-    print('Center of Array of Positions:')
-    print(center)
-
-.. parsed-literal::
-
-    Center of Array of Positions:
-    (<Angle 11h 43m 00.66s>, <Angle +44deg 53' 17.5">, <Distance 2.06265e+14 AU>)
-
-
-And the equivalent using Asterisms. For all of these initial examples,
-the Skyfield implementation will basically show the inner workings of
-the Asterism function.
-
-.. code:: python
-
-    a.barycenter(position_array)
 
 
 
 .. parsed-literal::
 
-    (<Angle 11h 43m 00.66s>, <Angle +44deg 53' 17.5">, <Distance 2.06265e+14 AU>)
+    (<Angle 11h 43m 00.66s>, <Angle +44deg 53' 17.5">)
 
 
 
@@ -128,8 +89,9 @@ Hipparcos
 Skyfield has some built-in functions for working with the Hipparcos
 catalogue. See
 `hipparcos.py <https://github.com/brandon-rhodes/python-skyfield/blob/master/skyfield/data/hipparcos.py>`__.
-This doesn't need to be in the examples, but I'm leaving it here until I
-figure out how to use Skyfields functions in my project.
+My project currently relies on the Skyfield `pull request I
+made <https://github.com/brandon-rhodes/python-skyfield/pull/36>`__. So,
+I am going to leave this here as a note to self.
 
 .. code:: python
 
@@ -195,7 +157,12 @@ Initialize a Constellation
 --------------------------
 
 You can initialize a constellation with the following code. The bare
-minimum needed is really just a name and a list of star segments.
+minimum needed is really just a name and a list of star segments. At the
+time of writing, all of the constellations are (to oversimplify the
+format) just lists of star segments. Each star is listed by the
+Hipparcos number. The only reason I chose this nomenclature is because
+others were already using HIP numbers in their constellationship.fab
+files.
 
 .. code:: python
 
@@ -214,128 +181,50 @@ minimum needed is really just a name and a list of star segments.
     '54061'
 
 
-::
+Constellation Properties
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-    ---------------------------------------------------------------------------
-    TypeError                                 Traceback (most recent call last)
-
-    <ipython-input-1-b3b9e2df2c7e> in <module>()
-          1 import asterisms as a
-          2 segs = '67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774'
-    ----> 3 uma = a.Constellation(name='Ursa Major',name_alt='Big Dipper',abbrev='UMA',segs=segs)
-    
-
-    /home/tom/projects/asterisms/asterisms/__init__.py in __init__(self, *args, **kw)
-         37         for star in list(set(self.segs)):
-         38             self.stars.append(hipparcos.get(star))
-    ---> 39         self.barycenter = barycenter(self.stars)
-         40         #self.circumcenter=None
-         41         # whether information is default or not, additional arguments overwrite
-
-
-    /home/tom/projects/asterisms/asterisms/geometry.pyc in barycenter(position, weight)
-         69     mean_dist = Distance(AU=0.0).AU
-         70     for coord in position_array:
-    ---> 71         mean_ra = mean_ra + coord[0].radians
-         72         mean_dec = mean_dec + coord[1].radians
-         73         mean_dist = mean_dist + coord[2].AU
-
-
-    TypeError: 'Star' object does not support indexing
-
-
-Visual barycenter of a constellation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When a list of star segments is given to initialize a constellation, it
-looks up each Hipparcos number. Each constellation has a miniature
-dictionary of the raw Hipparcos lines, that can be retrieved with
-``db``. Additionally, a unique list of star positions can be retrieved
-with ``coords``. Internally, ``db`` was parsed for the list of
-positions. This in turn, is fed to the ``barycenter`` function that
-calculates the visual barycenter of the constellation. By visual
-barycenter, it just implies a mean position that is unweighted.
-
+Each constellation instance has some basic properties, such as ``name``,
+``name_alt``, abbreviation ``abbrev``, number of segments ``segs_n``,
+and segments ``segs``. Segments is a list of an even number of star
+segments, named by Hipparcos number.
 
 .. code:: python
 
+    print(uma.name)
+    print(uma.name_alt)
+    print(uma.abbrev)
     print(uma.segs)
     print(uma.segs_n)
-    print(uma.db)
-    print(uma.coords)
-    print(uma.barycenter)
 
-::
+.. parsed-literal::
 
-
-    ---------------------------------------------------------------------------
-    NameError                                 Traceback (most recent call last)
-
-    <ipython-input-8-14af0027e580> in <module>()
-    ----> 1 print(uma.dict)
-          2 print(uma.coords)
-          3 print(uma.barycenter)
+    Ursa Major
+    Big Dipper
+    UMA
+    ['67301', '65378', '65378', '62956', '62956', '59774', '59774', '54061', '54061', '53910', '53910', '58001', '58001', '59774']
+    7
 
 
-    NameError: name 'uma' is not defined
-
-
-Circumcenter
-------------
-
-This example shows how to calculate the circumcenter of a list of stars
-with both Skyfield and Asterisms.
-
-
-and the equivalent using Asterisms
-
-
-Hipparcos
----------
-
-At the time of writing, all of the constellations are (to oversimplify
-the format) just lists of star segments. Each star is listed by the
-Hipparcos number. The only reason I chose this nomenclature is because
-others were already using HIP numbers in their constellationship.fab
-files. Here is how to set up a constellation just using Skyfield, then
-also using Asterisms.
+When given the list of Hipparcos numbered segments, the Constellation
+inititializes a list of stars by using Skyfield's
+`hipparcos.get <https://github.com/brandon-rhodes/python-skyfield/blob/master/skyfield/data/hipparcos.py>`__
+method. It also passes these stars along and calculates the visual
+(unweighted) center of the constellation. By this, it is meant that it
+is the mean position. This is a tuple of right ascension and declination
+in Skyfield's Angle type.
 
 .. code:: python
 
-    #from skyfield.data import hipparcos
-    #Alcor is HIP 65477
-    #Mizar is HIP 65378
-    
-    #hipparcos.get(['65477','65378'])
+    print(uma.stars)
+    print(uma.center)
 
-.. code:: python
+.. parsed-literal::
 
-    line = 'H|       11767| |02 31 47.08|+89 15 50.9| 1.97|1|H|037.94614689|+89.26413805| |   7.56|   44.22|  -11.74|  0.39|  0.45|  0.48|  0.47|  0.55|-0.16| 0.05| 0.27|-0.01| 0.08| 0.05| 0.04|-0.12|-0.09|-0.36|  1| 1.22| 11767| 2.756|0.003| 2.067|0.003| | 0.636|0.003|T|0.70|0.00|L| | 2.1077|0.0021|0.014|102| | 2.09| 2.13|   3.97|P|1|A|02319+8915|I| 1| 1| | | |  |   |       |     |     |    |S| |P|  8890|B+88    8 |          |          |0.68|F7:Ib-IIv SB|G\n'
-    star = hipparcos.parse(line)
-    print(star.ra.hours, star.dec.degrees)
-Constellation
--------------
-
-Show a constellation using PyEphem, Skyfield, and Asterisms.
-
-PyEphem
-~~~~~~~
+    [Star(ra_hours=13.398761920264775, dec_degrees=54.925361752393151, ra_mas_per_year=121.23, dec_mas_per_year=-22.01, parallax_mas=41.73, names=[('HIP', 65378)]), Star(ra_hours=11.030687999605183, dec_degrees=56.382426786427374, ra_mas_per_year=81.66, dec_mas_per_year=33.74, parallax_mas=41.07, names=[('HIP', 53910)]), Star(ra_hours=13.792343787984251, dec_degrees=49.313265059674272, ra_mas_per_year=-121.23, dec_mas_per_year=-15.56, parallax_mas=32.39, names=[('HIP', 67301)]), Star(ra_hours=11.897179848125406, dec_degrees=53.694760084185191, ra_mas_per_year=107.76, dec_mas_per_year=11.16, parallax_mas=38.99, names=[('HIP', 58001)]), Star(ra_hours=12.257100034120432, dec_degrees=57.032616901786447, ra_mas_per_year=103.56, dec_mas_per_year=7.81, parallax_mas=40.05, names=[('HIP', 59774)]), Star(ra_hours=12.900485951888628, dec_degrees=55.959821158352696, ra_mas_per_year=111.74, dec_mas_per_year=-8.99, parallax_mas=40.3, names=[('HIP', 62956)]), Star(ra_hours=11.062130192490219, dec_degrees=61.75103320112995, ra_mas_per_year=-136.46, dec_mas_per_year=-35.25, parallax_mas=26.38, names=[('HIP', 54061)])]
+    (<Angle 12h 20m 02.75s>, <Angle +55deg 34' 47.6">)
 
 
-Skyfield
-~~~~~~~~
-
-
-Asterisms
-~~~~~~~~~
-
-and the equivalent using Asterisms
-
-.. code:: python
-
-    ori = a.Constellation(name='test')
-    print(ori)
 Precession
 ----------
 
@@ -362,6 +251,12 @@ The following precesses the stars of the constellation.
 
     import vondrak as v
     print('using Vondrak version %s' % v.__version__)
+
+.. parsed-literal::
+
+    using Vondrak version 0.03
+
+
 Cartography
 ~~~~~~~~~~~
 
@@ -380,7 +275,7 @@ probably be moved over to the test section.
     # Midpoint
     #==========
     from skyfield.api import Star, earth, now
-    import asterisms as a
+    from asterisms.geometry import midpoint
     algol = Star(ra_hours=( 3,  8, 10.1315), dec_degrees=(40, 57, 20.332)) # approximately Algol
     mizar = Star(ra_hours=(13, 23, 55.5),    dec_degrees=(54, 55, 31)) # approximately Mizar
     algol_pos = earth(now()).observe(algol)
@@ -390,12 +285,23 @@ probably be moved over to the test section.
     p2 = mizar_pos.radec()
     print(p1)
     print(p2)
-    p3 = a.midpoint(p1, p2)
+    p3 = midpoint(p1, p2)
     print(p3)
     # If given a tuple of just (RA, Dec), return midpoint as (RA, Dec)
     p4 = (p1[0], p1[1])
     p5 = (p2[0], p2[1])
     print(p4)
     print(p5)
-    p6 = a.midpoint(p4,p5)
+    p6 = midpoint(p4,p5)
     print(p6)
+
+.. parsed-literal::
+
+    (<Angle 03h 08m 10.13s>, <Angle +40deg 57' 20.3">, <Distance 2.06265e+14 AU>)
+    (<Angle 13h 23m 55.50s>, <Angle +54deg 55' 31.0">, <Distance 2.06265e+14 AU>)
+    (<Angle 08h 16m 02.82s>, <Angle +47deg 56' 25.7">, <Distance 2.06265e+14 AU>)
+    (<Angle 03h 08m 10.13s>, <Angle +40deg 57' 20.3">)
+    (<Angle 13h 23m 55.50s>, <Angle +54deg 55' 31.0">)
+    (<Angle 08h 16m 02.82s>, <Angle +47deg 56' 25.7">)
+
+

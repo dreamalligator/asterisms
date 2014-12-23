@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>About &mdash; asterisms 0.02 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.02',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="#" />
+    <link rel="top" title="asterisms 0.02 documentation" href="index.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">asterisms 0.02 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="about">
+<h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<p>For <a class="reference internal" href="#eons">eons</a>, man has looked up at the night sky. What did they see before 1922?</p>
+<div class="section" id="goals">
+<h2>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>To divide the night sky into historical and cultural night skies.</li>
+<li>To chart these night skies using the current boundary formats, and provide a database and methodology to start things off.</li>
+</ol>
+<p>From <a class="reference external" href="https://en.wikipedia.org/wiki/Constellation#IAU_constellations">Wikipedia</a>:</p>
+<blockquote>
+<div><p>In <a class="reference external" href="http://articles.adsabs.harvard.edu/full/1922PA.....30..469R">1922</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/Henry_Norris_Russell">Henry Norris Russell</a> aided the IAU (<a class="reference external" href="https://en.wikipedia.org/wiki/International_Astronomical_Union">International Astronomical Union</a>) in dividing the celestial sphere into 88 official <a class="reference external" href="http://www.ianridpath.com/iaulist1.htm">constellations</a>. Where possible, these modern constellations usually share the names of their Graeco-Roman predecessors, such as <a class="reference external" href="https://en.wikipedia.org/wiki/Orion_%28constellation%29">Orion</a>, Leo or Scorpius. The aim of this system is area-mapping, i.e. the division of the celestial sphere into <a class="reference external" href="http://www.iau.org/public/themes/constellations/">contiguous fields</a>. Out of the 88 modern constellations, 36 lie predominantly in the northern sky, and the other 52 predominantly in the southern.</p>
+<p>In 1930, the boundaries between the 88 constellations were devised by <a class="reference external" href="https://en.wikipedia.org/wiki/Eug%C3%A8ne_Joseph_Delporte">Eugène Delporte</a> along vertical and horizontal lines of right ascension and declination. However, the data he used originated back to epoch B1875.0, which was when Benjamin A. Gould first made the proposal to designate boundaries for the celestial sphere, a suggestion upon which Delporte would base his work. The consequence of this early date is that due to the precession of the equinoxes, the borders on a modern star map, such as epoch J2000, are already <a class="reference external" href="http://cdsarc.u-strasbg.fr/ftp/cats/VI/49/constell.pdf">somewhat skewed</a> and no longer perfectly vertical or horizontal. This effect will increase over the years and centuries to come.</p>
+</div></blockquote>
+</div>
+<div class="section" id="format">
+<h2>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h2>
+<p>All bounds will use the boundary coordinate format specified in the <a class="reference external" href="http://www.iau.org/public/themes/constellations/">IAU constellation</a> page.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">A text file containing a set of coordinates that defines the boundaries of the constellations in the sky. The format is:</div>
+<div class="line">HH MM SS.SSSS| DD.DDDDDDD|XXX</div>
+</div>
+<div class="line-block">
+<div class="line">Where:</div>
+<div class="line">HH MM SS.SSSS defines the right ascension hour, minute and second with J2000 coordinates</div>
+<div class="line">DD.DDDDDDD defines the declination with J2000 coordinates</div>
+<div class="line">XXX is the abbreviation of the constellation name</div>
+<div class="line">| is the separator of the fields</div>
+</div>
+<div class="line-block">
+<div class="line">Example:</div>
+<div class="line">22 57 51.6729| 35.1682358|AND</div>
+</div>
+</div></blockquote>
+<p><a class="reference external" href="http://www.iau.org/static/public/constellations/txt/ori.txt">Here</a> is Orion&#8217;s boundary text file.</p>
+<p>The end goal will complete the night sky similar to the current designations for different night skies throughout history. Here is an example of the current IAU bounds, see <a class="reference external" href="#notebooks">below</a> for more examples.</p>
+<img alt="iau constellation bounds by family'" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/bounds_family.png" />
+<p>The structure I am thinking all constellations and asterisms will use for this project is the following. Where the third field is the endonym of the asterism if applicable.</p>
+<p>Example <tt class="docutils literal"><span class="pre">1952_rey_asterisms.dat</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">'gsq'</span> <span class="pre">'great</span> <span class="pre">square'</span> <span class="pre">'großen</span> <span class="pre">Platz'</span> <span class="pre">4</span> <span class="pre">113963</span> <span class="pre">113881</span> <span class="pre">113881</span> <span class="pre">677</span> <span class="pre">677</span> <span class="pre">1067</span> <span class="pre">1067</span> <span class="pre">113963</span></tt></p>
+<p>Or use the stellarium/pystaratlas styled text file structure.</p>
+<p>Example <tt class="docutils literal"><span class="pre">1952_rey_constellationship.fab</span></tt> delimited by spaces:</p>
+<p><tt class="docutils literal"><span class="pre">GSq</span> <span class="pre">4</span> <span class="pre">113963</span> <span class="pre">113881</span> <span class="pre">113881</span> <span class="pre">677</span> <span class="pre">677</span> <span class="pre">1067</span> <span class="pre">1067</span> <span class="pre">113963</span></tt></p>
+<p>Example <tt class="docutils literal"><span class="pre">1952_rey_constellation_names.fab</span></tt> delimited by tab characters:</p>
+<p><tt class="docutils literal"><span class="pre">Gsq</span>&nbsp;&nbsp; <span class="pre">&quot;Great</span> <span class="pre">Square&quot;</span>&nbsp; <span class="pre">_(&quot;Great</span> <span class="pre">Square&quot;)</span></tt></p>
+<p>When adding new asterisms and constellations, please provide an IPython Notebook. It should plot examples, as well as document the sources, and as much information as possible. In lieu of a notebook, please make an issue in the tracker about the subject. Any help or discussion is more than welcome.</p>
+</div>
+<div class="section" id="eons">
+<h2>Eons<a class="headerlink" href="#eons" title="Permalink to this headline">¶</a></h2>
+<p>When I say eons, maybe I should tone it down to less than a million, but I&#8217;d like to think that the first hominids looked at the night sky in the early Miocene, 22 million years ago. If not, then at least by the end of the epoch 5 million years ago when apes were diversified enough to distinctly call some pre-human. It was recently found that <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S0960982212015072">dung beetles watch the sky</a>, so why not?</p>
+<p>From <a class="reference external" href="https://en.wikipedia.org/wiki/Orion_%28constellation%29#History_and_mythology">Wikipedia</a>:</p>
+<blockquote>
+<div>The earliest depiction that has been linked to the constellation of Orion is a prehistoric (<a class="reference external" href="https://en.wikipedia.org/wiki/Aurignacian">Aurignacian</a>) mammoth ivory carving found in a cave in the Ach valley in Germany in 1979. Archaeologists have estimated it to have been fashioned approximately <a class="reference external" href="http://www.academia.edu/2548806/The_anthropoid_in_the_sky_Does_a_32_000_years_old_ivory_plate_show_the_constellation_Orion_combined_with_a_pregnancy_calendar">32,000 to 38,000 years ago</a>.The distinctive pattern of Orion has been recognized in numerous cultures around the world, and many myths have been associated with it. It has also been used as a symbol in the modern world.</div></blockquote>
+<p>So, there&#8217;s a lot to cover, but you&#8217;ve got to start somewhere, so let&#8217;s start with some of these. Please add an <a class="reference external" href="https://github.com/digitalvapor/asterisms/issues">issue</a> in the tracker for another specific culture, time, or possibly based on a specific work.</p>
+</div>
+<div class="section" id="night-skies">
+<h2>Night Skies<a class="headerlink" href="#night-skies" title="Permalink to this headline">¶</a></h2>
+<p>Some night skies by culture:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Australian_Aboriginal_astronomy">Australian Aboriginal</a></li>
+<li>Chakavian-Kaykavian</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Nakh_peoples#Cosmology_and_creation">Chechen (Nakh)</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Chinese_constellations">Chinese</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Egyptian_astronomy">Egyptian</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Ancient_Greek_astronomy">Greco-Roman</a></li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Indian_astronomy">Hindu &lt;https://en.wikipedia.org/wiki/Hindu_astrology) / `Indian</a></li>
+<li>Incan</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Inuit_astronomy">Inuit</a></li>
+<li>Korean</li>
+<li>Maori</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Astronomy_in_medieval_Islam">Medieval Islam</a></li>
+<li>Mesopotamian (<a class="reference external" href="https://en.wikipedia.org/wiki/Babylonian_star_catalogues)-Assyrian-Sumerian">Babylonian</a></li>
+<li>Native American</li>
+<li>Nordic</li>
+<li>Sumerian</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Tibetan_astronomy">Tibetan</a></li>
+</ul>
+<p>Some night sky works, by date:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Vedanga_Jyotisha">Vedanga Jyotisha</a> by Lagadha (1400-1200 BCE)</li>
+<li>Iliad, Odyssey by Homer (~ 700 BC)</li>
+<li>Works and Days, Astronomy attributed to Hesiod (~700 BC)</li>
+<li>Eudoxus</li>
+<li>Aratus</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Poeticon_astronomicon">Poeticon astronomicon</a>  attributed to <a class="reference external" href="https://en.wikipedia.org/wiki/Hyginus">Hyginus</a> (~1 CE)</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Almagest">Almagest</a> by <a class="reference external" href="https://en.wikipedia.org/wiki/Ptolemy">Ptolemy</a> (100-178 CE)</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Dunhuang_Star_Chart">Dunhuang star chart</a> 618–907 AD</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Book_of_Fixed_Stars">Book of Fixed Stars</a> by <a class="reference external" href="https://en.wikipedia.org/wiki/Abd_al-Rahman_al-Sufi">al-Sufi</a> (964)</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Cheonsang_Yeolcha_Bunyajido">Cheonsang Yeolcha Bunyajido</a> (1395)</li>
+<li><a class="reference external" href="http://www.ianridpath.com/startales/durer.htm">hemispheres</a> by <a class="reference external" href="https://en.wikipedia.org/wiki/Albrecht_D%C3%BCrer">Albrecht Dürer</a> (1515)</li>
+<li>Astronomiæ Instauratæ Progymnasmata by <a class="reference external" href="https://en.wikipedia.org/wiki/Tycho_Brahe">Tycho Brahe</a> (1588)</li>
+<li>Petrus Plancius (~ 1600)</li>
+<li>Pieter Dirkszoon Keyser and Frederick de Houtman (~ 1600)</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Uranometria">Uranometria Omnium Asterismorum</a> by <a class="reference external" href="https://en.wikipedia.org/wiki/Johann_Bayer">Bayer</a> (1603)</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Rudolphine_Tables">Rudolphine Tables</a> by <a class="reference external" href="https://en.wikipedia.org/wiki/Johannes_Kepler">Kepler</a> (1627)</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Prodromus_Astronomiae">Prodromus Astronomiae</a> by <a class="reference external" href="https://en.wikipedia.org/wiki/Johannes_Hevelius">Johannes Hevelius</a> (1690)</li>
+<li>Nicolas Louis de Lacaille (1754)</li>
+<li>Uranographia by Johann Elert Bode (1801)</li>
+</ul>
+<p>Also, see:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/88_modern_constellations_in_different_languages">88 modern constellations in different languages</a>.</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Former_constellations">former constellations</a>.</li>
+<li>Ian Ridpath&#8217;s <a class="reference external" href="https://www.youtube.com/watch?v=nZm-QaKqS-Y">Pictures in the sky: the origin and history of constellations</a>. See <a class="reference external" href="https://www.youtube.com/watch?v=nZm-QaKqS-Y#t=1379">t=1379</a> for depiction of Transmission of the constellations from their origin up to the 16th century.</li>
+</ul>
+</div>
+<div class="section" id="notebooks">
+<h2>Notebooks<a class="headerlink" href="#notebooks" title="Permalink to this headline">¶</a></h2>
+<p>For the moment, progress will be logged in the <a class="reference external" href="https://github.com/digitalvapor/asterisms/tree/master/notebooks">notebooks</a> folder in the form of <a class="reference external" href="https://github.com/ipython/ipython">IPython Notebooks</a>. You can <a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/tree/master/notebooks/">view them with nbviewer</a>.</p>
+<p>To run, <tt class="docutils literal"><span class="pre">ipython</span> <span class="pre">notebook</span></tt> in either the <tt class="docutils literal"><span class="pre">notebooks</span></tt> or <tt class="docutils literal"><span class="pre">docs</span></tt> folder.</p>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/asterisms/docs/examples.ipynb">examples</a> - Examples using the Asterisms project.</p>
+<ul class="simple">
+<li>Find the visual barycenter of a constellation.</li>
+<li>Create a constellation and precess it thousands of years.</li>
+</ul>
+</div>
+<div class="section" id="draw-bounds">
+<h3>Draw Bounds<a class="headerlink" href="#draw-bounds" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/draw-bounds.ipynb">draw bounds</a> - Input IAU format constellation region points and output a constellation polygon.</p>
+<img alt="orion constellation" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/orion.png" />
+</div>
+<div class="section" id="iau-bounds">
+<h3>IAU Bounds<a class="headerlink" href="#iau-bounds" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/iau-bounds.ipynb">iau bounds</a> -  A method to plot all IAU constellation bounds. The algorithms amend wrapping discontinuities and account for the poles. Also added functionality to group the constellations and color the polygons.</p>
+<img alt="iau constellation bounds by family" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/bounds_family.png" />
+<img alt="iau constellation bounds by time" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/bounds_time.png" />
+</div>
+<div class="section" id="mini-hipparcos">
+<h3>Mini-Hipparcos<a class="headerlink" href="#mini-hipparcos" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/mini-hipparcos.ipynb">mini-hipparcos</a> - Take a largish <a class="reference external" href="https://en.wikipedia.org/wiki/Hipparcos">Hipparcos</a> database and minify it for use with the asterisms by <a class="reference external" href="https://en.wikipedia.org/wiki/H._A._Rey">H. A. Rey</a>. File reduced to 0.671% for 792 stars out of an original 117955. Also, discover we are missing <a class="reference external" href="https://en.wikipedia.org/wiki/Xi_Ursae_Majoris">ksi UMa</a> in the <a class="reference external" href="https://pystaratlas.googlecode.com/files/hip2.dat">hip2.dat</a> catalog.</p>
+</div>
+<div class="section" id="proper-motion">
+<h3>Proper Motion<a class="headerlink" href="#proper-motion" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/proper-motion.ipynb">proper motion</a> - The change of α Ursa Major 100000 years from now.</p>
+<img alt="alpha ursa major" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/alphaUM.png" />
+</div>
+<div class="section" id="stars">
+<h3>Stars<a class="headerlink" href="#stars" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/stars.ipynb">stars</a> - An equirectangular plot of the stars, assign magnitude, and color spectrum.</p>
+<img alt="orion constellation" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/stars.png" />
+</div>
+<div class="section" id="curious-asterisms">
+<h3>Curious Asterisms<a class="headerlink" href="#curious-asterisms" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/curious-asterisms.ipynb">curious asterisms</a> - asterisms by <a class="reference external" href="https://en.wikipedia.org/wiki/H._A._Rey">H. A. Rey</a>, the creator of Curious George. Here is Gemeni holding hands.</p>
+<img alt="gemeni holding hands" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/gemeni.png" />
+</div>
+<div class="section" id="far-flung-proper-motion">
+<h3>Far-flung Proper Motion<a class="headerlink" href="#far-flung-proper-motion" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/far-flung-proper-motion.ipynb">far-flung-proper-motion</a> - some discussion on long-term precession models.</p>
+</div>
+<div class="section" id="vondrak">
+<h3>Vondrak<a class="headerlink" href="#vondrak" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/vondrak.ipynb">vondrak</a> - Translated Vondrák&#8217;s precession model to Python. Create a precession matrix and implement it. Here is the precession of Polaris over 400000 years. I also released this <a class="reference external" href="https://github.com/digitalvapor/vondrak/">Vondrak code</a> as a standalone Python package. See the documentation at <a class="reference external" href="https://digitalvapor.github.io/vondrak">https://digitalvapor.github.io/vondrak</a>.</p>
+<img alt="Long term precession of Polaris over 400000 years" src="https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/polaris_long_term.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">About</a><ul>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#format">Format</a></li>
+<li><a class="reference internal" href="#eons">Eons</a></li>
+<li><a class="reference internal" href="#night-skies">Night Skies</a></li>
+<li><a class="reference internal" href="#notebooks">Notebooks</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#draw-bounds">Draw Bounds</a></li>
+<li><a class="reference internal" href="#iau-bounds">IAU Bounds</a></li>
+<li><a class="reference internal" href="#mini-hipparcos">Mini-Hipparcos</a></li>
+<li><a class="reference internal" href="#proper-motion">Proper Motion</a></li>
+<li><a class="reference internal" href="#stars">Stars</a></li>
+<li><a class="reference internal" href="#curious-asterisms">Curious Asterisms</a></li>
+<li><a class="reference internal" href="#far-flung-proper-motion">Far-flung Proper Motion</a></li>
+<li><a class="reference internal" href="#vondrak">Vondrak</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/about.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">asterisms 0.02 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tom Spalding.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
