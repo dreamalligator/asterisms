@@ -1,4 +1,6 @@
+import skyfield
 from skyfield.units import Angle, Distance
+#from skyfield.starlib import Star
 import numpy as np
 from numpy import array
 
@@ -12,7 +14,7 @@ def midpoint(p1, p2):
     If dist is included, the returned tuple is (Mid_RA, Mid_Dec, Mid_Dist).
     Otherwise, it is (Mid_RA, Mid_Dec).
 
-    You can alternatively use ``barycenter`` for multiple points.'''
+    You can alternatively use ``center`` for multiple points.'''
 
     if(not isinstance(p1, tuple) or not isinstance(p2, tuple)):
         raise ValueError('Can only pass two tuples to this function.')
@@ -26,19 +28,35 @@ def midpoint(p1, p2):
     else:
         return (Angle(radians=mean_ra, preference='hours'), Angle(radians=mean_dec, signed=True))
 
-def barycenter(position, weight=None):
-    '''Calculate the barycenter of a list of coordinates.
+def center(positions):
+    '''Calculate the visual center of a list of coordinates.
 
-    This function can take a few different forms of position.
+    This function can take two kinds of lists of positions. Lists of tuples, or
+    lists of Stars.
 
-    The first is a list of coordinates in tuples in the form ``[(ra0,dec0,dist0), (ra1,dec1,dist1)]``.
-    You can also pass it an numpy array of such a list such as if ``position_list = [(ra0,dec0,dist0), (ra1,dec1,dist1)]`` then you
-    can pass it array(position_list) which looks like
+    This may be useful for automatically centering a telescope or for a program
+    that automatically zooms to a location.
+
+    The first is a list of coordinates in tuples. It looks like ``[(ra0,dec0), (ra1,dec1)]``,
+    where RA and Dec are Skyfield Angle instances.
 
     ::
 
-        [[(ra0,dec0,dist0)]
-         [(ra1,dec1,dist1)]]``
+        import skyfield
+        from skyfield.api import Star, earth, now
+        from skyfield.units import Angle, Distance
+        from numpy import array
+
+        algol = Star(ra_hours=( 3,  8, 10.1315),  dec_degrees=(40, 57, 20.332))  #approximately Algol
+        mizar = Star(ra_hours=(13, 23, 55.5),     dec_degrees=(54, 55, 31))      #approximately Mizar
+        vega  = Star(ra_hours=(18, 36, 56.33635), dec_degrees=(38, 47, 01.2802)) #approximately Vega
+        stars = [algol, mizar, vega]
+        positions = []
+        for star in stars:
+            star_pos = earth(now()).observe(star)
+            positions.append(star_pos.radec())
+
+        center1 = a.center(positions)
 
     Additionally, you can pass it a list of Stars. For example with Alcor, Mizar and Dubhe.
 
@@ -49,48 +67,35 @@ def barycenter(position, weight=None):
         stars.append(hipparcos.get('65477'))
         stars.append(hipparcos.get('65378'))
         stars.append(hipparcos.get('54061'))
-        center = barycenter(stars)
+        center3 = center(stars)
 
     RA is of Skyfield type Angle, with ``preference='hours'``. Dec is of Skyfield
-    type Angle. Distance is Skyfield type Distance, in AU units.
+    type Angle.
 
-    Optionally,
-    given the option to weight by magnitude with ``weight=True``.
+    Returns a coordinate tuple of right ascension and declination ``(ra,dec)``.'''
 
-    Returns a coordinate tuple of right ascension and declination ``(ra,dec)``.
-
-    The default is to assume that all objects are equally weighted.
-
-    An alternative is to use a magnitude weighted barycenter.
-
-    This may be useful for automatically centering a telescope or for a program
-    that automatically zooms to a location.'''
-
-    if(isinstance(position, list)):
-        position_array = array(position)
-    elif(isinstance(position, np.ndarray)):
-        position_array = position # Already a numpy array
-    else:
-        raise ValueError('Must be passed an array or list.')
+    if(not isinstance(positions, list)):
+        raise ValueError('Must be passed a list.')
         return None
-
-    if(weight):
-        print('WARNING: IGNORING WEIGHT PARAMETER, NOT SET UP YET.')
 
     # Average the coordinates to get an unweighted center
     mean_ra = Angle(hours=0.0).radians
     mean_dec = Angle(degrees=0.0).radians
-    mean_dist = Distance(AU=0.0).AU
-    for coord in position_array:
-        mean_ra = mean_ra + coord[0].radians
-        mean_dec = mean_dec + coord[1].radians
-        mean_dist = mean_dist + coord[2].AU
-    mean_ra = mean_ra / len(position_array)
-    mean_dec = mean_dec / len(position_array)
-    mean_dist = mean_dist / len(position_array)
+    # Passed list of Stars
+    if(isinstance(positions[0], skyfield.starlib.Star)):
+        for star in positions:
+            mean_ra = mean_ra + star.ra.radians
+            mean_dec = mean_dec + star.dec.radians
+    # Or passed list of position tuples
+    else:
+        for coord in positions:
+            mean_ra = mean_ra + coord[0].radians
+            mean_dec = mean_dec + coord[1].radians
+    mean_ra = mean_ra / len(positions)
+    mean_dec = mean_dec / len(positions)
 
-    center = (Angle(radians=mean_ra, preference='hours'), Angle(radians=mean_dec, signed=True), Distance(AU=mean_dist))
-    return center
+    ctr = (Angle(radians=mean_ra, preference='hours'), Angle(radians=mean_dec, signed=True))
+    return ctr
 
 # def slope(p1, p2):
 #     '''The slope between two points

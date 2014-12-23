@@ -1,8 +1,6 @@
 import skyfield
-#from skyfield.units import Angle, Distance
-from .geometry import barycenter
+from .geometry import center
 from skyfield.data import hipparcos
-#from numpy import array
 
 __version__ = 0.02
 
@@ -11,19 +9,15 @@ class Constellation(object):
 
     A `Constellation` instance has the following attributes.
 
-    `name` - the name of the constellation or asterism
-    `abbrev` - abbreviation of the constellation
-    `name_alt` - endonym, colloquial name, or alternative name of constellation
-    `segs_n` - the number of segments that comprise the constellation
-    `segs` - a list of star pairs that comprise segments
-    `center` - a coordinate pair of the center of the constellation. equal
-               weight is given to each star in the segments
-
-    TODO: incorporate Hipparcos lookup. Constellation should hold all information
-    needed to build.
+    | `name` - the name of the constellation or asterism.
+    | `abbrev` - abbreviation of the constellation.
+    | `name_alt` - endonym, colloquial name, or alternative name of constellation.
+    | `segs_n` - the number of segments that comprise the constellation.
+    | `segs` - a list of star pairs that comprise segments.
+    | `center` - a coordinate pair of the center of the constellation.
+    | `stars` - a list of stars in the constellation.
     """
     def __init__(self, *args, **kw):
-        # create a Constellation instance
         self.name = kw.pop('name', None)
         self.abbrev = kw.pop('abbrev', None)
         self.name_alt = kw.pop('name_alt', None)
@@ -36,17 +30,12 @@ class Constellation(object):
         self.stars = []
         for star in list(set(self.segs)):
             self.stars.append(hipparcos.get(star))
-        self.barycenter = barycenter(self.stars)
+        self.center = center(self.stars)
         #self.circumcenter=None
-        # whether information is default or not, additional arguments overwrite
-        # the fields.
-        #name = kw.pop('name',None)
-        #if name is not None:
-        #    self.name = name
 
     def __repr__(self):
         """Return a useful textual representation of this Constellation."""
-        return('<asterism.Constellation name=%s abbrev=%s name_alt=%s segs_n=%s barycenter=%s >' % (self.name, self.abbrev, self.name_alt, self.segs_n, self.barycenter, self.circumcenter))
+        return('<asterism.Constellation name=%s abbrev=%s name_alt=%s segs_n=%s center=%s >' % (self.name, self.abbrev, self.name_alt, self.segs_n, self.center))
 
 class Boundary():
     """A boundary for a constellation, asterism, or other celestial object.
