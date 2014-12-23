@@ -24,3 +24,5 @@ Contents
    about
    examples
    api
+
+.. include:: about.rst
