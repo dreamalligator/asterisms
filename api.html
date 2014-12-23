@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Asterisms API &mdash; asterisms 0.02 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.02',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="asterisms 0.02 documentation" href="index.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">asterisms 0.02 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-asterisms">
+<span id="asterisms-api"></span><h1>Asterisms API<a class="headerlink" href="#module-asterisms" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="asterisms.Boundary">
+<em class="property">class </em><tt class="descclassname">asterisms.</tt><tt class="descname">Boundary</tt><a class="reference internal" href="_modules/asterisms.html#Boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.Boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boundary for a constellation, asterism, or other celestial object.</p>
+<p>A <cite>Boundary</cite> instance has the following attributes.</p>
+<p><cite>name</cite> - the name of the boundary
+<cite>points</cite> - a list of celestial coordinate pairs in order for the border;</p>
+<blockquote>
+<div>closed or unclosed acceptable</div></blockquote>
+<p><cite>area</cite> - area of the celestial polygon
+<cite>center</cite> - a coordinate pair of the center of the polygon
+<cite>epoch</cite> - epoch that these coordinates were set by</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="asterisms.Constellation">
+<em class="property">class </em><tt class="descclassname">asterisms.</tt><tt class="descname">Constellation</tt><big>(</big><em>*args</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/asterisms.html#Constellation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.Constellation" title="Permalink to this definition">¶</a></dt>
+<dd><p>A constellation or asterism.</p>
+<p>A <cite>Constellation</cite> instance has the following attributes.</p>
+<p><cite>name</cite> - the name of the constellation or asterism
+<cite>abbrev</cite> - abbreviation of the constellation
+<cite>name_alt</cite> - endonym, colloquial name, or alternative name of constellation
+<cite>segs_n</cite> - the number of segments that comprise the constellation
+<cite>segs</cite> - a list of star pairs that comprise segments
+<cite>center</cite> - a coordinate pair of the center of the constellation. equal</p>
+<blockquote>
+<div>weight is given to each star in the segments</div></blockquote>
+<p>TODO: incorporate Hipparcos lookup. Constellation should hold all information
+needed to build.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asterisms.asterism">
+<tt class="descclassname">asterisms.</tt><tt class="descname">asterism</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/asterisms.html#asterism"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.asterism" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the asterism database and return an asterism.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asterisms.star">
+<tt class="descclassname">asterisms.</tt><tt class="descname">star</tt><big>(</big><em>name</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/asterisms.html#star"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.star" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the mini star database and return a star.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="previous chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >previous</a> |</li>
+        <li><a href="index.html">asterisms 0.02 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tom Spalding.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

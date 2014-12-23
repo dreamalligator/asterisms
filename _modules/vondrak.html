@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>vondrak &mdash; asterisms 0.02 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.02',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="asterisms 0.02 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">asterisms 0.02 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for vondrak</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">append</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="mf">0.03</span>
+
+<span class="c"># 2Pi</span>
+<span class="n">tau</span> <span class="o">=</span>  <span class="mf">6.283185307179586476925287e0</span>
+
+<span class="c"># Arcseconds to radians</span>
+<span class="n">as2r</span> <span class="o">=</span> <span class="mf">4.848136811095359935899141e-6</span>
+
+<span class="c"># Obliquity at J2000.0 (radians)</span>
+<span class="n">eps0</span> <span class="o">=</span> <span class="mf">84381.406</span> <span class="o">*</span> <span class="n">as2r</span>
+
+<div class="viewcode-block" id="ltp_PECL"><a class="viewcode-back" href="../api.html#vondrak.ltp_PECL">[docs]</a><span class="k">def</span> <span class="nf">ltp_PECL</span><span class="p">(</span><span class="n">jepoch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Long-term precession of the ecliptic</span>
+
+<span class="sd">    Given Julian epoch (TT).</span>
+
+<span class="sd">    Return ecliptic pole unit vector.</span>
+
+<span class="sd">    ``ltp_PECL`` generates the unit vector for the pole of the ecliptic, using the series for Pₐ, Qₐ. The vector is with respect to the J2000.0 mean equator and equinox.&#39;&#39;&#39;</span>
+
+    <span class="c"># There is a typographical error in the original coefficient</span>
+    <span class="c"># C₇ for Qₐ should read 198.296701 instead of 198.296071</span>
+    <span class="c"># Src: http://www.aanda.org/articles/aa/abs/2012/05/aa17274e-11/aa17274e-11.html</span>
+
+    <span class="c"># Number of polynomial and periodic coefficients</span>
+    <span class="n">npol</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">nper</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="c"># Polynomial coefficients</span>
+    <span class="n">pqpol</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="o">+</span><span class="mf">5851.607687</span><span class="p">,</span><span class="o">-</span><span class="mf">1600.886300</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.1189000</span><span class="p">,</span><span class="o">+</span><span class="mf">1.1689818</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.00028913</span><span class="p">,</span><span class="o">-</span><span class="mf">0.00000020</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">+</span><span class="mf">0.000000101</span><span class="p">,</span><span class="o">-</span><span class="mf">0.000000437</span><span class="p">],</span>
+    <span class="p">])</span>
+
+    <span class="c"># Periodic coefficients</span>
+    <span class="n">pqper</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mf">708.15</span><span class="p">,</span> <span class="o">-</span><span class="mf">5486.751211</span><span class="p">,</span> <span class="o">-</span><span class="mf">684.661560</span><span class="p">,</span> <span class="mf">667.666730</span><span class="p">,</span> <span class="o">-</span><span class="mf">5523.863691</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">2309.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">17.127623</span><span class="p">,</span> <span class="mf">2446.283880</span><span class="p">,</span> <span class="o">-</span><span class="mf">2354.886252</span><span class="p">,</span> <span class="o">-</span><span class="mf">549.747450</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1620.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">617.517403</span><span class="p">,</span> <span class="mf">399.671049</span><span class="p">,</span> <span class="o">-</span><span class="mf">428.152441</span><span class="p">,</span> <span class="o">-</span><span class="mf">310.998056</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">492.20</span><span class="p">,</span> <span class="mf">413.442940</span><span class="p">,</span> <span class="o">-</span><span class="mf">356.652376</span><span class="p">,</span> <span class="mf">376.202861</span><span class="p">,</span> <span class="mf">421.535876</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1183.00</span><span class="p">,</span> <span class="mf">78.614193</span><span class="p">,</span> <span class="o">-</span><span class="mf">186.387003</span><span class="p">,</span> <span class="mf">184.778874</span><span class="p">,</span> <span class="o">-</span><span class="mf">36.776172</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">622.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">180.732815</span><span class="p">,</span> <span class="o">-</span><span class="mf">316.800070</span><span class="p">,</span> <span class="mf">335.321713</span><span class="p">,</span> <span class="o">-</span><span class="mf">145.278396</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">882.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.676083</span><span class="p">,</span> <span class="mf">198.296701</span><span class="p">,</span> <span class="o">-</span><span class="mf">185.138669</span><span class="p">,</span> <span class="o">-</span><span class="mf">34.744450</span><span class="p">],</span> <span class="c"># corrected coefficient per erratum</span>
+        <span class="p">[</span><span class="mf">547.00</span><span class="p">,</span> <span class="mf">46.140315</span><span class="p">,</span> <span class="mf">101.135679</span><span class="p">,</span> <span class="o">-</span><span class="mf">120.972830</span><span class="p">,</span> <span class="mf">22.885731</span><span class="p">],</span>
+    <span class="p">])</span>
+
+    <span class="c"># Centuries since J2000</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">jepoch</span><span class="o">-</span><span class="mf">2000.0</span><span class="p">)</span><span class="o">/</span><span class="mf">100.0</span>
+
+    <span class="c"># Initialize Pₐ and Qₐ accumulators</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c"># Periodic Terms</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nper</span><span class="p">):</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">tau</span><span class="o">*</span><span class="n">T</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">W</span><span class="o">/</span><span class="n">pqper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">+</span> <span class="n">C</span><span class="o">*</span><span class="n">pqper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">S</span><span class="o">*</span><span class="n">pqper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">+</span> <span class="n">C</span><span class="o">*</span><span class="n">pqper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">S</span><span class="o">*</span><span class="n">pqper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="c"># Polynomial Terms</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">npol</span><span class="p">):</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">+</span> <span class="n">pqpol</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">W</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">+</span> <span class="n">pqpol</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">W</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="o">*</span><span class="n">T</span>
+
+    <span class="c"># Pₐ and Qₐ (radians)</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span><span class="o">*</span><span class="n">as2r</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span><span class="o">*</span><span class="n">as2r</span>
+
+    <span class="c"># Form the ecliptic pole vector</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">P</span><span class="o">*</span><span class="n">P</span><span class="o">-</span><span class="n">Q</span><span class="o">*</span><span class="n">Q</span><span class="p">,</span><span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">eps0</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">eps0</span><span class="p">)</span>
+    <span class="n">vec0</span> <span class="o">=</span> <span class="n">P</span>
+    <span class="n">vec1</span> <span class="o">=</span> <span class="o">-</span><span class="n">Q</span><span class="o">*</span><span class="n">C</span> <span class="o">-</span> <span class="n">Z</span><span class="o">*</span><span class="n">S</span>
+    <span class="n">vec2</span> <span class="o">=</span> <span class="o">-</span><span class="n">Q</span><span class="o">*</span><span class="n">S</span> <span class="o">+</span> <span class="n">Z</span><span class="o">*</span><span class="n">C</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">vec0</span><span class="p">,</span><span class="n">vec1</span><span class="p">,</span><span class="n">vec2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">vec</span>
+</div>
+<div class="viewcode-block" id="ltp_PEQU"><a class="viewcode-back" href="../api.html#vondrak.ltp_PEQU">[docs]</a><span class="k">def</span> <span class="nf">ltp_PEQU</span><span class="p">(</span><span class="n">jepoch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Long-term precession of the equator</span>
+
+<span class="sd">    Given Julian epoch (TT)</span>
+
+<span class="sd">    Return equator pole unit vector</span>
+
+<span class="sd">    ``ltp_PEQU`` generates the unit vector for the pole of the equator, using the series for Xₐ, Yₐ. The vector is with respect to the J2000.0 mean equator and equinox.&#39;&#39;&#39;</span>
+
+    <span class="c"># Number of polynomial and periodic coefficients</span>
+    <span class="n">npol</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">nper</span> <span class="o">=</span> <span class="mi">14</span>
+
+    <span class="c"># Polynomial coefficients</span>
+    <span class="n">xypol</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="o">+</span><span class="mf">5453.282155</span><span class="p">,</span><span class="o">-</span><span class="mf">73750.930350</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">+</span><span class="mf">0.4252841</span><span class="p">,</span><span class="o">-</span><span class="mf">0.7675452</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.00037173</span><span class="p">,</span><span class="o">-</span><span class="mf">0.00018725</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mf">0.000000152</span><span class="p">,</span><span class="o">+</span><span class="mf">0.000000231</span><span class="p">],</span>
+    <span class="p">])</span>
+
+    <span class="c"># Periodic coefficients</span>
+    <span class="n">xyper</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mf">256.75</span><span class="p">,</span> <span class="o">-</span><span class="mf">819.940624</span><span class="p">,</span> <span class="mf">75004.344875</span><span class="p">,</span> <span class="mf">81491.287984</span><span class="p">,</span> <span class="mf">1558.515853</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">708.15</span><span class="p">,</span> <span class="o">-</span><span class="mf">8444.676815</span><span class="p">,</span> <span class="mf">624.033993</span><span class="p">,</span> <span class="mf">787.163481</span><span class="p">,</span> <span class="mf">7774.939698</span><span class="p">,],</span>
+        <span class="p">[</span><span class="mf">274.20</span><span class="p">,</span> <span class="mf">2600.009459</span><span class="p">,</span> <span class="mf">1251.136893</span><span class="p">,</span> <span class="mf">1251.296102</span><span class="p">,</span> <span class="o">-</span><span class="mf">2219.534038</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">241.45</span><span class="p">,</span> <span class="mf">2755.175630</span><span class="p">,</span> <span class="o">-</span><span class="mf">1102.212834</span><span class="p">,</span> <span class="o">-</span><span class="mf">1257.950837</span><span class="p">,</span> <span class="o">-</span><span class="mf">2523.969396</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">2309.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">167.659835</span><span class="p">,</span> <span class="o">-</span><span class="mf">2660.664980</span><span class="p">,</span> <span class="o">-</span><span class="mf">2966.799730</span><span class="p">,</span> <span class="mf">247.850422</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">492.20</span><span class="p">,</span> <span class="mf">871.855056</span><span class="p">,</span> <span class="mf">699.291817</span><span class="p">,</span> <span class="mf">639.744522</span><span class="p">,</span> <span class="o">-</span><span class="mf">846.485643</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">396.10</span><span class="p">,</span> <span class="mf">44.769698</span><span class="p">,</span> <span class="mf">153.167220</span><span class="p">,</span> <span class="mf">131.600209</span><span class="p">,</span> <span class="o">-</span><span class="mf">1393.124055</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">288.90</span><span class="p">,</span> <span class="o">-</span><span class="mf">512.313065</span><span class="p">,</span> <span class="o">-</span><span class="mf">950.865637</span><span class="p">,</span> <span class="o">-</span><span class="mf">445.040117</span><span class="p">,</span> <span class="mf">368.526116</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">231.10</span><span class="p">,</span> <span class="o">-</span><span class="mf">819.415595</span><span class="p">,</span> <span class="mf">499.754645</span><span class="p">,</span> <span class="mf">584.522874</span><span class="p">,</span> <span class="mf">749.045012</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1610.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">538.071099</span><span class="p">,</span> <span class="o">-</span><span class="mf">145.188210</span><span class="p">,</span> <span class="o">-</span><span class="mf">89.756563</span><span class="p">,</span> <span class="mf">444.704518</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">620.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">189.793622</span><span class="p">,</span> <span class="mf">558.116553</span><span class="p">,</span> <span class="mf">524.429630</span><span class="p">,</span> <span class="mf">235.934465</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">157.87</span><span class="p">,</span> <span class="o">-</span><span class="mf">402.922932</span><span class="p">,</span> <span class="o">-</span><span class="mf">23.923029</span><span class="p">,</span> <span class="o">-</span><span class="mf">13.549067</span><span class="p">,</span> <span class="mf">374.049623</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">220.30</span><span class="p">,</span> <span class="mf">179.516345</span><span class="p">,</span> <span class="o">-</span><span class="mf">165.405086</span><span class="p">,</span> <span class="o">-</span><span class="mf">210.157124</span><span class="p">,</span> <span class="o">-</span><span class="mf">171.330180</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1200.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">9.814756</span><span class="p">,</span> <span class="mf">9.344131</span><span class="p">,</span> <span class="o">-</span><span class="mf">44.919798</span><span class="p">,</span> <span class="o">-</span><span class="mf">22.899655</span><span class="p">],</span>
+    <span class="p">])</span>
+
+    <span class="c"># Centuries since J2000</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">jepoch</span><span class="o">-</span><span class="mf">2000.0</span><span class="p">)</span><span class="o">/</span><span class="mf">100.0</span>
+
+    <span class="c"># Initialize Pₐ and Qₐ accumulators</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c"># Periodic Terms</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">nper</span><span class="p">):</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">tau</span><span class="o">*</span><span class="n">T</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">W</span><span class="o">/</span><span class="n">xyper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="n">C</span><span class="o">*</span><span class="n">xyper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">S</span><span class="o">*</span><span class="n">xyper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span> <span class="o">+</span> <span class="n">C</span><span class="o">*</span><span class="n">xyper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">S</span><span class="o">*</span><span class="n">xyper</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="c"># Polynomial Terms</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">npol</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="n">xypol</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">W</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span> <span class="o">+</span> <span class="n">xypol</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">W</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="o">*</span><span class="n">T</span>
+
+    <span class="c"># X and Y (direction cosines)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">*</span><span class="n">as2r</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">*</span><span class="n">as2r</span>
+
+    <span class="c"># Form the equator pole vector</span>
+    <span class="n">veq0</span> <span class="o">=</span> <span class="n">X</span>
+    <span class="n">veq1</span> <span class="o">=</span> <span class="n">Y</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">X</span><span class="o">*</span><span class="n">X</span> <span class="o">+</span> <span class="n">Y</span><span class="o">*</span><span class="n">Y</span>
+    <span class="n">veq2</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">W</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="n">veq2</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">W</span><span class="p">)</span>
+    <span class="n">veq</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">veq0</span><span class="p">,</span> <span class="n">veq1</span><span class="p">,</span> <span class="n">veq2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">veq</span>
+</div>
+<div class="viewcode-block" id="pxp"><a class="viewcode-back" href="../api.html#vondrak.pxp">[docs]</a><span class="k">def</span> <span class="nf">pxp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;p-vector outer (=vector=cross) product.</span>
+
+<span class="sd">    Given two p-vectors (a and b)</span>
+<span class="sd">    Return a x b</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">xa</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ya</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">za</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">xb</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">yb</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">zb</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">axb</span> <span class="o">=</span> <span class="n">array</span><span class="p">([])</span>
+    <span class="n">axb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">axb</span><span class="p">,</span><span class="n">ya</span><span class="o">*</span><span class="n">zb</span> <span class="o">-</span> <span class="n">za</span><span class="o">*</span><span class="n">yb</span><span class="p">)</span>
+    <span class="n">axb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">axb</span><span class="p">,</span><span class="n">za</span><span class="o">*</span><span class="n">xb</span> <span class="o">-</span> <span class="n">xa</span><span class="o">*</span><span class="n">zb</span><span class="p">)</span>
+    <span class="n">axb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">axb</span><span class="p">,</span><span class="n">xa</span><span class="o">*</span><span class="n">yb</span> <span class="o">-</span> <span class="n">ya</span><span class="o">*</span><span class="n">xb</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">axb</span>
+</div>
+<div class="viewcode-block" id="pn"><a class="viewcode-back" href="../api.html#vondrak.pn">[docs]</a><span class="k">def</span> <span class="nf">pn</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Convert a p-vector into modulus and unit vector.</span>
+
+<span class="sd">    Given p-vector (p)</span>
+
+<span class="sd">    Return modulus (r), and unit vector (u)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c"># Modulus of p-vector</span>
+    <span class="c"># http://www.iausofa.org/2013_1202_C/sofa/pm.c</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">array</span><span class="p">([])</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">w</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">):</span>
+        <span class="c"># zero a p-vector</span>
+        <span class="c"># http://www.iausofa.org/2013_1202_C/sofa/zp.c</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">,[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># unit vector</span>
+        <span class="c"># http://www.iausofa.org/2013_1202_C/sofa/sxp.c</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">w</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">w</span>
+    <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span>
+</div>
+<div class="viewcode-block" id="pdp"><a class="viewcode-back" href="../api.html#vondrak.pdp">[docs]</a><span class="k">def</span> <span class="nf">pdp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;p-vector inner (=scalar=dot) product.</span>
+
+<span class="sd">    Given two p-vectors (a and b)</span>
+
+<span class="sd">    Return a * b&#39;&#39;&#39;</span>
+
+    <span class="c"># this is akin to the SOFA iauPdp, but it handles 3x3 square</span>
+    <span class="c"># matrices times (dot) column vectors 3x1</span>
+    <span class="c"># http://www.iausofa.org/2013_1202_C/sofa/pdp.c</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">adb</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">adb</span>
+</div>
+<div class="viewcode-block" id="ltp_PMAT"><a class="viewcode-back" href="../api.html#vondrak.ltp_PMAT">[docs]</a><span class="k">def</span> <span class="nf">ltp_PMAT</span><span class="p">(</span><span class="n">jepoch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Long-term precession matrix</span>
+
+<span class="sd">    Given Julian epoch (TT)</span>
+
+<span class="sd">    Return precession matrix, J2000.0 to date</span>
+
+<span class="sd">    ``ltp_PMAT`` generates the 3 × 3 rotation matrix **P**, constructed using</span>
+<span class="sd">    Fabri parameterization (i.e. directly from the unit vectors for the ecliptic</span>
+<span class="sd">    and equator poles). The resulting matrix transforms vectors with respect to</span>
+<span class="sd">    the mean equator and equinox of epoch 2000.0 into mean place of date.</span>
+
+<span class="sd">    The matrix is in the sense ``P_date = RP x P_J2000``,</span>
+<span class="sd">    where ``P_J2000`` is a vector with respect to the J2000.0 mean</span>
+<span class="sd">    equator and equinox and ``P_date`` is the same vector with respect to</span>
+<span class="sd">    the equator and equinox of epoch EPJ.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c"># Equator pole (bottom row of matrix)</span>
+    <span class="n">peqr</span> <span class="o">=</span> <span class="n">ltp_PEQU</span><span class="p">(</span><span class="n">jepoch</span><span class="p">)</span>
+
+    <span class="c"># Ecliptic pole</span>
+    <span class="n">pecl</span> <span class="o">=</span> <span class="n">ltp_PECL</span><span class="p">(</span><span class="n">jepoch</span><span class="p">)</span>
+
+    <span class="c"># Equinox (top row of matrix)</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">pxp</span><span class="p">(</span><span class="n">peqr</span><span class="p">,</span> <span class="n">pecl</span><span class="p">)</span> <span class="c"># P-vector outer product.</span>
+    <span class="n">w</span><span class="p">,</span> <span class="n">EQX</span> <span class="o">=</span> <span class="n">pn</span><span class="p">(</span><span class="n">V</span><span class="p">)</span> <span class="c"># Convert a p-vector into modulus and unit vector</span>
+
+    <span class="c"># Middle row of matrix</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">pxp</span><span class="p">(</span><span class="n">peqr</span><span class="p">,</span> <span class="n">EQX</span><span class="p">)</span>
+
+    <span class="c"># The matrix elements</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">array</span><span class="p">([])</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rp</span><span class="p">,</span> <span class="p">[</span><span class="n">EQX</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">peqr</span><span class="p">])</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rp</span>
+</div>
+<div class="viewcode-block" id="ltp_PBMAT"><a class="viewcode-back" href="../api.html#vondrak.ltp_PBMAT">[docs]</a><span class="k">def</span> <span class="nf">ltp_PBMAT</span><span class="p">(</span><span class="n">jepoch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Long-term precession matrix, including GCRS frame bias.</span>
+
+<span class="sd">    Given Julian epoch (TT)</span>
+
+<span class="sd">    Return precession-bias matrix, J2000.0 to date</span>
+
+<span class="sd">    ``ltp_PBMAT`` generates the 3 × 3 rotation matrix **P** × **B**, where **B**</span>
+<span class="sd">    is the “frame bias matrix” that expresses the relative orientation of the</span>
+<span class="sd">    GCRS and mean J2000.0 reference systems. A simple first-order implementation</span>
+<span class="sd">    of the frame bias is used, the departure from rigor being well under 1 μas.</span>
+
+<span class="sd">    The matrix is in the sense ``P_date = RPB x P_J2000``,</span>
+<span class="sd">    where ``P_J2000`` is a vector in the Geocentric Celestial Reference</span>
+<span class="sd">    System, and P_date is the vector with respect to the Celestial</span>
+<span class="sd">    Intermediate Reference System at that date but with nutation</span>
+<span class="sd">    neglected.</span>
+
+<span class="sd">    A first order bias formulation is used, of sub-microarcsecond</span>
+<span class="sd">    accuracy compared with a full 3D rotation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c"># Frame bias (IERS Conventions 2010, Eqs. 5.21 and 5.33)</span>
+    <span class="n">DX</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.016617</span> <span class="o">*</span> <span class="n">as2r</span>
+    <span class="n">DE</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0068192</span> <span class="o">*</span> <span class="n">as2r</span>
+    <span class="n">DR</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0146</span> <span class="o">*</span> <span class="n">as2r</span>
+
+    <span class="c"># Precession matrix.</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">ltp_PMAT</span><span class="p">(</span><span class="n">jepoch</span><span class="p">)</span>
+
+    <span class="c"># Apply the bias</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">array</span><span class="p">([])</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span>  <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>    <span class="o">-</span> <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">DR</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">DX</span><span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span>  <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DR</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>    <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">DE</span><span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span> <span class="o">-</span><span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DX</span> <span class="o">-</span> <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">DE</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>   <span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span>  <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>    <span class="o">-</span> <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">DR</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">DX</span><span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span>  <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DR</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>    <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">DE</span><span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span> <span class="o">-</span><span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DX</span> <span class="o">-</span> <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">DE</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>   <span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span>  <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>    <span class="o">-</span> <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">DR</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">DX</span><span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span>  <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DR</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>    <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">DE</span><span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">append</span><span class="p">(</span><span class="n">rpb</span><span class="p">,</span> <span class="o">-</span><span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">DX</span> <span class="o">-</span> <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">DE</span> <span class="o">+</span> <span class="n">rp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>   <span class="p">)</span>
+    <span class="n">rpb</span> <span class="o">=</span> <span class="n">rpb</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rpb</span>
+</div>
+<div class="viewcode-block" id="epj"><a class="viewcode-back" href="../api.html#vondrak.epj">[docs]</a><span class="k">def</span> <span class="nf">epj</span><span class="p">(</span><span class="n">dj</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Julian Date to Julian Epoch&#39;&#39;&#39;</span>
+    <span class="c"># based on http://www.iausofa.org/2013_1202_C/sofa/epj.c</span>
+    <span class="n">DJ00</span> <span class="o">=</span> <span class="mf">2451545.0</span> <span class="c"># Reference epoch (J2000.0), Julian Date</span>
+    <span class="n">DJY</span> <span class="o">=</span> <span class="mf">365.25</span> <span class="c"># Days per Julian year</span>
+    <span class="n">jepoch</span> <span class="o">=</span> <span class="mf">2000.0</span> <span class="o">+</span> <span class="p">(</span><span class="n">dj</span> <span class="o">-</span> <span class="n">DJ00</span><span class="p">)</span><span class="o">/</span><span class="n">DJY</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">jepoch</span>
+</div>
+<div class="viewcode-block" id="ra_dec"><a class="viewcode-back" href="../api.html#vondrak.ra_dec">[docs]</a><span class="k">def</span> <span class="nf">ra_dec</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Convert a cartesian position matrix to RA and Dec&#39;&#39;&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ra</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">dec</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">asterisms 0.02 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tom Spalding.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Examples &mdash; asterisms 0.02 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.02',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="asterisms 0.02 documentation" href="index.html" />
+    <link rel="next" title="Asterisms API" href="api.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="Asterisms API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">asterisms 0.02 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>Asterisms is intended to aid in logging of historical asterisms.
+Whenever possible, I am going to follow conventions of parallel projects
+so that there is the utmost compatibility possible. I think usage and
+facilitating sharing of information is a big part of the project. To
+that end, some of these examples show how to accomplish the equivalent
+<em>without</em> Asterisms. This could be helpful, if you don&#8217;t want an extra
+dependency. It could also help you seamlessly drop in the Asterisms
+project.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;using Asterisms version </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>using Asterisms version 0.02
+</pre></div>
+</div>
+<div class="section" id="format">
+<h2>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h2>
+<p>A note on format and compatibility. Constellation/asterism format is
+historically based on the Stellarium (who else uses it?)
+<tt class="docutils literal"><span class="pre">constellationship.fab</span></tt> files. See the R.A. Rey asterism files for
+example. The other asterism format I chose, was because I didn&#8217;t see a
+point in having two files, when you could have one text file.</p>
+<p>Whenever possible, I am deferring position, units, and vector format
+decisions to the Skyfield project, which I am going to leverage.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">skyfield</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;using Skyfield version </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">skyfield</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>using Skyfield version 0.4
+</pre></div>
+</div>
+</div>
+<div class="section" id="barycenter">
+<h2>Barycenter<a class="headerlink" href="#barycenter" title="Permalink to this headline">¶</a></h2>
+<p>This example shows how to calculate the barycenter (equally weighted) of
+a list of stars with both Skyfield and Asterisms. This could be useful
+if you wanted to point a telescope, or a celestrial mapping program, to
+the center of a constellation. I like to think of it as a visual
+barycenter.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">skyfield</span>
+<span class="kn">from</span> <span class="nn">skyfield.api</span> <span class="kn">import</span> <span class="n">Star</span><span class="p">,</span> <span class="n">earth</span><span class="p">,</span> <span class="n">now</span>
+<span class="kn">from</span> <span class="nn">skyfield.units</span> <span class="kn">import</span> <span class="n">Angle</span><span class="p">,</span> <span class="n">Distance</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+
+<span class="c"># Gather star positions and put coords in an array</span>
+<span class="n">algol</span> <span class="o">=</span> <span class="n">Star</span><span class="p">(</span><span class="n">ra_hours</span><span class="o">=</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mf">10.1315</span><span class="p">),</span>  <span class="n">dec_degrees</span><span class="o">=</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mf">20.332</span><span class="p">))</span>  <span class="c">#approximately Algol</span>
+<span class="n">mizar</span> <span class="o">=</span> <span class="n">Star</span><span class="p">(</span><span class="n">ra_hours</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mf">55.5</span><span class="p">),</span>     <span class="n">dec_degrees</span><span class="o">=</span><span class="p">(</span><span class="mi">54</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">31</span><span class="p">))</span>      <span class="c">#approximately Mizar</span>
+<span class="n">vega</span>  <span class="o">=</span> <span class="n">Star</span><span class="p">(</span><span class="n">ra_hours</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mf">56.33635</span><span class="p">),</span> <span class="n">dec_degrees</span><span class="o">=</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mf">01.2802</span><span class="p">))</span> <span class="c">#approximately Vega</span>
+<span class="n">stars</span> <span class="o">=</span> <span class="p">[</span><span class="n">algol</span><span class="p">,</span> <span class="n">mizar</span><span class="p">,</span> <span class="n">vega</span><span class="p">]</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">stars</span><span class="p">:</span>
+    <span class="n">star_pos</span> <span class="o">=</span> <span class="n">earth</span><span class="p">(</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">star</span><span class="p">)</span>
+    <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">star_pos</span><span class="o">.</span><span class="n">radec</span><span class="p">())</span>
+<span class="n">position_array</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;Array of Positions&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">position_array</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Array of Positions
+[[&lt;Angle 03h 08m 10.13s&gt; &lt;Angle +40deg 57&#39; 20.3&quot;&gt; &lt;Distance 2.06265e+14 AU&gt;]
+ [&lt;Angle 13h 23m 55.50s&gt; &lt;Angle +54deg 55&#39; 31.0&quot;&gt; &lt;Distance 2.06265e+14 AU&gt;]
+ [&lt;Angle 18h 36m 56.34s&gt; &lt;Angle +38deg 47&#39; 01.3&quot;&gt; &lt;Distance 2.06265e+14 AU&gt;]]
+</pre></div>
+</div>
+<p>How to get the visual Barycenter just using Skyfield</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Average the coordinates to get an unweighted center</span>
+<span class="n">mean_ra</span> <span class="o">=</span> <span class="n">skyfield</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">Angle</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">radians</span>
+<span class="n">mean_dec</span> <span class="o">=</span> <span class="n">skyfield</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">Angle</span><span class="p">(</span><span class="n">degrees</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">radians</span>
+<span class="n">mean_dist</span> <span class="o">=</span> <span class="n">skyfield</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">Distance</span><span class="p">(</span><span class="n">AU</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">AU</span>
+<span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">position_array</span><span class="p">:</span>
+    <span class="n">mean_ra</span> <span class="o">=</span> <span class="n">mean_ra</span> <span class="o">+</span> <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">radians</span>
+    <span class="n">mean_dec</span> <span class="o">=</span> <span class="n">mean_dec</span> <span class="o">+</span> <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">radians</span>
+    <span class="n">mean_dist</span> <span class="o">=</span> <span class="n">mean_dist</span> <span class="o">+</span> <span class="n">coord</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">mean_ra</span> <span class="o">=</span> <span class="n">mean_ra</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">position_array</span><span class="p">)</span>
+<span class="n">mean_dec</span> <span class="o">=</span> <span class="n">mean_dec</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">position_array</span><span class="p">)</span>
+<span class="n">mean_dist</span> <span class="o">=</span> <span class="n">mean_dist</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">position_array</span><span class="p">)</span>
+
+<span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">mean_ra</span><span class="p">,</span> <span class="n">preference</span><span class="o">=</span><span class="s">&#39;hours&#39;</span><span class="p">),</span> <span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">mean_dec</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">Distance</span><span class="p">(</span><span class="n">AU</span><span class="o">=</span><span class="n">mean_dist</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;Center of Array of Positions:&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">center</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Center of Array of Positions:
+(&lt;Angle 11h 43m 00.66s&gt;, &lt;Angle +44deg 53&#39; 17.5&quot;&gt;, &lt;Distance 2.06265e+14 AU&gt;)
+</pre></div>
+</div>
+<p>And the equivalent using Asterisms. For all of these initial examples,
+the Skyfield implementation will basically show the inner workings of
+the Asterism function.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span><span class="o">.</span><span class="n">barycenter</span><span class="p">(</span><span class="n">position_array</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;Angle 11h 43m 00.66s&gt;, &lt;Angle +44deg 53&#39; 17.5&quot;&gt;, &lt;Distance 2.06265e+14 AU&gt;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="hipparcos">
+<h2>Hipparcos<a class="headerlink" href="#hipparcos" title="Permalink to this headline">¶</a></h2>
+<p>Skyfield has some built-in functions for working with the Hipparcos
+catalogue. See
+<a class="reference external" href="https://github.com/brandon-rhodes/python-skyfield/blob/master/skyfield/data/hipparcos.py">hipparcos.py</a>.
+This doesn&#8217;t need to be in the examples, but I&#8217;m leaving it here until I
+figure out how to use Skyfields functions in my project.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="n">line</span> <span class="o">=</span> <span class="s">&#39;H|       11767| |02 31 47.08|+89 15 50.9| 1.97|1|H|037.94614689|+89.26413805| |   7.56|   44.22|  -11.74|  0.39|  0.45|  0.48|  0.47|  0.55|-0.16| 0.05| 0.27|-0.01| 0.08| 0.05| 0.04|-0.12|-0.09|-0.36|  1| 1.22| 11767| 2.756|0.003| 2.067|0.003| | 0.636|0.003|T|0.70|0.00|L| | 2.1077|0.0021|0.014|102| | 2.09| 2.13|   3.97|P|1|A|02319+8915|I| 1| 1| | | |  |   |       |     |     |    |S| |P|  8890|B+88    8 |          |          |0.68|F7:Ib-IIv SB|G</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="n">star</span> <span class="o">=</span> <span class="n">hipparcos</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">hours</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">2.5303010234979411</span><span class="p">,</span> <span class="mf">89.264109507429168</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">cache</span> <span class="k">as</span> <span class="n">default_cache</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">&#39;ftp://cdsarc.u-strasbg.fr/cats/I/239/hip_main.dat.gz&#39;</span>
+
+<span class="k">def</span> <span class="nf">load2</span><span class="p">(</span><span class="n">is_match</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">default_cache</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">cache</span><span class="o">.</span><span class="n">open_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">days_old</span><span class="o">=</span><span class="mi">9999</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">(</span><span class="n">fileobj</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+        <span class="c">#data = gzip.open(&#39;hip_main.dat.gz&#39;)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">is_match</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+               <span class="k">yield</span> <span class="n">hipparcos</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+<span class="n">which</span> <span class="o">=</span> <span class="s">&#39;11767&#39;</span>
+<span class="n">is_match</span> <span class="o">=</span> <span class="n">which</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">__eq__</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">load2</span><span class="p">(</span><span class="n">is_match</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">star</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">((</span><span class="n">s</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">dec</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Star(ra_hours=2.5303010234979411, dec_degrees=89.264109507429168, ra_mas_per_year=44.22, dec_mas_per_year=-11.74, parallax_mas=7.56, names=[(&#39;HIP&#39;, 11767)])
+(&lt;Angle 02h 31m 49.08s&gt;, &lt;Angle 89deg 15&#39; 50.8&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;11767&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;11767&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Star</span><span class="p">(</span><span class="n">ra_hours</span><span class="o">=</span><span class="mf">2.5303010234979411</span><span class="p">,</span> <span class="n">dec_degrees</span><span class="o">=</span><span class="mf">89.264109507429168</span><span class="p">,</span> <span class="n">ra_mas_per_year</span><span class="o">=</span><span class="mf">44.22</span><span class="p">,</span> <span class="n">dec_mas_per_year</span><span class="o">=-</span><span class="mf">11.74</span><span class="p">,</span> <span class="n">parallax_mas</span><span class="o">=</span><span class="mf">7.56</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;HIP&#39;</span><span class="p">,</span> <span class="mi">11767</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initialize-a-constellation">
+<h2>Initialize a Constellation<a class="headerlink" href="#initialize-a-constellation" title="Permalink to this headline">¶</a></h2>
+<p>You can initialize a constellation with the following code. The bare
+minimum needed is really just a name and a list of star segments.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
+<span class="n">segs</span> <span class="o">=</span> <span class="s">&#39;67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774&#39;</span>
+<span class="n">uma</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Ursa Major&#39;</span><span class="p">,</span><span class="n">name_alt</span><span class="o">=</span><span class="s">&#39;Big Dipper&#39;</span><span class="p">,</span><span class="n">abbrev</span><span class="o">=</span><span class="s">&#39;UMA&#39;</span><span class="p">,</span><span class="n">segs</span><span class="o">=</span><span class="n">segs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;65378&#39;</span>
+<span class="s">&#39;53910&#39;</span>
+<span class="s">&#39;67301&#39;</span>
+<span class="s">&#39;58001&#39;</span>
+<span class="s">&#39;59774&#39;</span>
+<span class="s">&#39;62956&#39;</span>
+<span class="s">&#39;54061&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-1-b3b9e2df2c7e&gt; in &lt;module&gt;()
+      1 import asterisms as a
+      2 segs = &#39;67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774&#39;
+----&gt; 3 uma = a.Constellation(name=&#39;Ursa Major&#39;,name_alt=&#39;Big Dipper&#39;,abbrev=&#39;UMA&#39;,segs=segs)
+
+
+/home/tom/projects/asterisms/asterisms/__init__.py in __init__(self, *args, **kw)
+     37         for star in list(set(self.segs)):
+     38             self.stars.append(hipparcos.get(star))
+---&gt; 39         self.barycenter = barycenter(self.stars)
+     40         #self.circumcenter=None
+     41         # whether information is default or not, additional arguments overwrite
+
+
+/home/tom/projects/asterisms/asterisms/geometry.pyc in barycenter(position, weight)
+     69     mean_dist = Distance(AU=0.0).AU
+     70     for coord in position_array:
+---&gt; 71         mean_ra = mean_ra + coord[0].radians
+     72         mean_dec = mean_dec + coord[1].radians
+     73         mean_dist = mean_dist + coord[2].AU
+
+
+TypeError: &#39;Star&#39; object does not support indexing
+</pre></div>
+</div>
+<div class="section" id="visual-barycenter-of-a-constellation">
+<h3>Visual barycenter of a constellation<a class="headerlink" href="#visual-barycenter-of-a-constellation" title="Permalink to this headline">¶</a></h3>
+<p>When a list of star segments is given to initialize a constellation, it
+looks up each Hipparcos number. Each constellation has a miniature
+dictionary of the raw Hipparcos lines, that can be retrieved with
+<tt class="docutils literal"><span class="pre">db</span></tt>. Additionally, a unique list of star positions can be retrieved
+with <tt class="docutils literal"><span class="pre">coords</span></tt>. Internally, <tt class="docutils literal"><span class="pre">db</span></tt> was parsed for the list of
+positions. This in turn, is fed to the <tt class="docutils literal"><span class="pre">barycenter</span></tt> function that
+calculates the visual barycenter of the constellation. By visual
+barycenter, it just implies a mean position that is unweighted.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">segs</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">segs_n</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">barycenter</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-8-14af0027e580&gt; in &lt;module&gt;()
+----&gt; 1 print(uma.dict)
+      2 print(uma.coords)
+      3 print(uma.barycenter)
+
+
+NameError: name &#39;uma&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="circumcenter">
+<h2>Circumcenter<a class="headerlink" href="#circumcenter" title="Permalink to this headline">¶</a></h2>
+<p>This example shows how to calculate the circumcenter of a list of stars
+with both Skyfield and Asterisms.</p>
+<p>and the equivalent using Asterisms</p>
+</div>
+<div class="section" id="id1">
+<h2>Hipparcos<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>At the time of writing, all of the constellations are (to oversimplify
+the format) just lists of star segments. Each star is listed by the
+Hipparcos number. The only reason I chose this nomenclature is because
+others were already using HIP numbers in their constellationship.fab
+files. Here is how to set up a constellation just using Skyfield, then
+also using Asterisms.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#from skyfield.data import hipparcos</span>
+<span class="c">#Alcor is HIP 65477</span>
+<span class="c">#Mizar is HIP 65378</span>
+
+<span class="c">#hipparcos.get([&#39;65477&#39;,&#39;65378&#39;])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">line</span> <span class="o">=</span> <span class="s">&#39;H|       11767| |02 31 47.08|+89 15 50.9| 1.97|1|H|037.94614689|+89.26413805| |   7.56|   44.22|  -11.74|  0.39|  0.45|  0.48|  0.47|  0.55|-0.16| 0.05| 0.27|-0.01| 0.08| 0.05| 0.04|-0.12|-0.09|-0.36|  1| 1.22| 11767| 2.756|0.003| 2.067|0.003| | 0.636|0.003|T|0.70|0.00|L| | 2.1077|0.0021|0.014|102| | 2.09| 2.13|   3.97|P|1|A|02319+8915|I| 1| 1| | | |  |   |       |     |     |    |S| |P|  8890|B+88    8 |          |          |0.68|F7:Ib-IIv SB|G</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="n">star</span> <span class="o">=</span> <span class="n">hipparcos</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">hours</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="constellation">
+<h2>Constellation<a class="headerlink" href="#constellation" title="Permalink to this headline">¶</a></h2>
+<p>Show a constellation using PyEphem, Skyfield, and Asterisms.</p>
+<div class="section" id="pyephem">
+<h3>PyEphem<a class="headerlink" href="#pyephem" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="skyfield">
+<h3>Skyfield<a class="headerlink" href="#skyfield" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="asterisms">
+<h3>Asterisms<a class="headerlink" href="#asterisms" title="Permalink to this headline">¶</a></h3>
+<p>and the equivalent using Asterisms</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ori</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ori</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="precession">
+<h2>Precession<a class="headerlink" href="#precession" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how to view a constellation a few thousand
+years in the past, and a few thousand years in the future. It leverages
+the <a class="reference external" href="https://digitalvapor.github.io/vondrak/">Vondrak</a> and Asterisms
+projects to this end. If you want to see how to implement the equivalent
+to this from scratch, please see the <tt class="docutils literal"><span class="pre">notebooks</span></tt> section of the
+Asterisms project, or my blog at <a class="reference external" href="http://antivapor.net">DigitalVapor</a>
+where I&#8217;ve posted on it.</p>
+<div class="section" id="create-constellation">
+<h3>Create Constellation<a class="headerlink" href="#create-constellation" title="Permalink to this headline">¶</a></h3>
+<p>This creates a constellation using Asterisms.</p>
+</div>
+<div class="section" id="precess-the-stars">
+<h3>Precess the Stars<a class="headerlink" href="#precess-the-stars" title="Permalink to this headline">¶</a></h3>
+<p>The following precesses the stars of the constellation.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">vondrak</span> <span class="kn">as</span> <span class="nn">v</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;using Vondrak version </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cartography">
+<h3>Cartography<a class="headerlink" href="#cartography" title="Permalink to this headline">¶</a></h3>
+<p>The following plots the constellation using basemap.</p>
+</div>
+</div>
+<div class="section" id="helper-functions">
+<h2>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
+<p>Some of the helper functions that work in the background. These will
+probably be moved over to the test section.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#==========</span>
+<span class="c"># Midpoint</span>
+<span class="c">#==========</span>
+<span class="kn">from</span> <span class="nn">skyfield.api</span> <span class="kn">import</span> <span class="n">Star</span><span class="p">,</span> <span class="n">earth</span><span class="p">,</span> <span class="n">now</span>
+<span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
+<span class="n">algol</span> <span class="o">=</span> <span class="n">Star</span><span class="p">(</span><span class="n">ra_hours</span><span class="o">=</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mf">10.1315</span><span class="p">),</span> <span class="n">dec_degrees</span><span class="o">=</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mf">20.332</span><span class="p">))</span> <span class="c"># approximately Algol</span>
+<span class="n">mizar</span> <span class="o">=</span> <span class="n">Star</span><span class="p">(</span><span class="n">ra_hours</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mf">55.5</span><span class="p">),</span>    <span class="n">dec_degrees</span><span class="o">=</span><span class="p">(</span><span class="mi">54</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">31</span><span class="p">))</span> <span class="c"># approximately Mizar</span>
+<span class="n">algol_pos</span> <span class="o">=</span> <span class="n">earth</span><span class="p">(</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">algol</span><span class="p">)</span>
+<span class="n">mizar_pos</span> <span class="o">=</span> <span class="n">earth</span><span class="p">(</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">mizar</span><span class="p">)</span>
+<span class="c"># If given a tuple of (RA, Dec, Dist), return midpoint as (RA, Dec, Dist)</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">algol_pos</span><span class="o">.</span><span class="n">radec</span><span class="p">()</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">mizar_pos</span><span class="o">.</span><span class="n">radec</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+<span class="n">p3</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">midpoint</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span>
+<span class="c"># If given a tuple of just (RA, Dec), return midpoint as (RA, Dec)</span>
+<span class="n">p4</span> <span class="o">=</span> <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">p5</span> <span class="o">=</span> <span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">p4</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">p5</span><span class="p">)</span>
+<span class="n">p6</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">midpoint</span><span class="p">(</span><span class="n">p4</span><span class="p">,</span><span class="n">p5</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">p6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#format">Format</a></li>
+<li><a class="reference internal" href="#barycenter">Barycenter</a></li>
+<li><a class="reference internal" href="#hipparcos">Hipparcos</a></li>
+<li><a class="reference internal" href="#initialize-a-constellation">Initialize a Constellation</a><ul>
+<li><a class="reference internal" href="#visual-barycenter-of-a-constellation">Visual barycenter of a constellation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#circumcenter">Circumcenter</a></li>
+<li><a class="reference internal" href="#id1">Hipparcos</a></li>
+<li><a class="reference internal" href="#constellation">Constellation</a><ul>
+<li><a class="reference internal" href="#pyephem">PyEphem</a></li>
+<li><a class="reference internal" href="#skyfield">Skyfield</a></li>
+<li><a class="reference internal" href="#asterisms">Asterisms</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#precession">Precession</a><ul>
+<li><a class="reference internal" href="#create-constellation">Create Constellation</a></li>
+<li><a class="reference internal" href="#precess-the-stars">Precess the Stars</a></li>
+<li><a class="reference internal" href="#cartography">Cartography</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#helper-functions">Helper Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">Asterisms API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/examples.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="Asterisms API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">asterisms 0.02 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tom Spalding.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

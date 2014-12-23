@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>asterisms &mdash; asterisms 0.02 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.02',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="asterisms 0.02 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">asterisms 0.02 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for asterisms</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">skyfield</span>
+<span class="c">#from skyfield.units import Angle, Distance</span>
+<span class="kn">from</span> <span class="nn">.geometry</span> <span class="kn">import</span> <span class="n">barycenter</span>
+<span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="c">#from numpy import array</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="mf">0.02</span>
+
+<div class="viewcode-block" id="Constellation"><a class="viewcode-back" href="../api.html#asterisms.Constellation">[docs]</a><span class="k">class</span> <span class="nc">Constellation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A constellation or asterism.</span>
+
+<span class="sd">    A `Constellation` instance has the following attributes.</span>
+
+<span class="sd">    `name` - the name of the constellation or asterism</span>
+<span class="sd">    `abbrev` - abbreviation of the constellation</span>
+<span class="sd">    `name_alt` - endonym, colloquial name, or alternative name of constellation</span>
+<span class="sd">    `segs_n` - the number of segments that comprise the constellation</span>
+<span class="sd">    `segs` - a list of star pairs that comprise segments</span>
+<span class="sd">    `center` - a coordinate pair of the center of the constellation. equal</span>
+<span class="sd">               weight is given to each star in the segments</span>
+
+<span class="sd">    TODO: incorporate Hipparcos lookup. Constellation should hold all information</span>
+<span class="sd">    needed to build.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="c"># create a Constellation instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abbrev</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;abbrev&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_alt</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;name_alt&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segs</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;segs&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segs</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segs</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segs</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;WARNING: number of stars in segments should be even.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segs_n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segs</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segs</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">star</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">barycenter</span> <span class="o">=</span> <span class="n">barycenter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stars</span><span class="p">)</span>
+        <span class="c">#self.circumcenter=None</span>
+        <span class="c"># whether information is default or not, additional arguments overwrite</span>
+        <span class="c"># the fields.</span>
+        <span class="c">#name = kw.pop(&#39;name&#39;,None)</span>
+        <span class="c">#if name is not None:</span>
+        <span class="c">#    self.name = name</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a useful textual representation of this Constellation.&quot;&quot;&quot;</span>
+        <span class="k">return</span><span class="p">(</span><span class="s">&#39;&lt;asterism.Constellation name=</span><span class="si">%s</span><span class="s"> abbrev=</span><span class="si">%s</span><span class="s"> name_alt=</span><span class="si">%s</span><span class="s"> segs_n=</span><span class="si">%s</span><span class="s"> barycenter=</span><span class="si">%s</span><span class="s"> &gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">abbrev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_alt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">segs_n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">barycenter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Boundary"><a class="viewcode-back" href="../api.html#asterisms.Boundary">[docs]</a><span class="k">class</span> <span class="nc">Boundary</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A boundary for a constellation, asterism, or other celestial object.</span>
+
+<span class="sd">    A `Boundary` instance has the following attributes.</span>
+
+<span class="sd">    `name` - the name of the boundary</span>
+<span class="sd">    `points` - a list of celestial coordinate pairs in order for the border;</span>
+<span class="sd">               closed or unclosed acceptable</span>
+<span class="sd">    `area` - area of the celestial polygon</span>
+<span class="sd">    `center` - a coordinate pair of the center of the polygon</span>
+<span class="sd">    `epoch` - epoch that these coordinates were set by</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a useful textual representation of this Boundary.&quot;&quot;&quot;</span>
+        <span class="k">return</span><span class="p">(</span><span class="s">&#39;&lt;asterism.Boundary&gt;&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="star"><a class="viewcode-back" href="../api.html#asterisms.star">[docs]</a><span class="k">def</span> <span class="nf">star</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load the mini star database and return a star.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">star</span>
+    <span class="kn">import</span> <span class="nn">asterisms.stars</span>
+    <span class="n">star</span> <span class="o">=</span> <span class="n">asterisms</span><span class="o">.</span><span class="n">stars</span><span class="o">.</span><span class="n">star</span>
+    <span class="k">return</span> <span class="n">star</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="asterism"><a class="viewcode-back" href="../api.html#asterisms.asterism">[docs]</a><span class="k">def</span> <span class="nf">asterism</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load the asterism database and return an asterism.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">asterism</span>
+    <span class="kn">import</span> <span class="nn">asterisms.asterisms</span>
+    <span class="n">asterism</span> <span class="o">=</span> <span class="n">asterisms</span><span class="o">.</span><span class="n">asterisms</span><span class="o">.</span><span class="n">asterism</span>
+    <span class="k">return</span> <span class="n">asterism</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="c"># expand/minimize database</span>
+<span class="c"># query Hipparcos catalog</span>
+<span class="c"># query other catalogs</span>
+<span class="c"># plot helper functions</span>
+<span class="c"># interpolation</span>
+<span class="c"># all plot types equirectangular, polar etc</span>
+<span class="c"># create new asterism</span>
+<span class="c"># delete asterism</span>
+<span class="c"># reset database to original</span>
+<span class="c"># bibtex, cite references in a separate database</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">asterisms 0.02 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Tom Spalding.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
