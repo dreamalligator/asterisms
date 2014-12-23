@@ -21,5 +21,6 @@ Contents
    :maxdepth: 2
 
    installation
+   about
    examples
    api
