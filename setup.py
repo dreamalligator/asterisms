@@ -10,12 +10,17 @@ setup(
     version = __version__,
     description = 'Asterism and celestial cartography helper functions',
     long_description = read('readme.rst'),
+    download_url = 'https://github.com/digitalvapor/asterisms/tarball/{0}'.format(__version__),
     url = 'https://github.com/digitalvapor/asterisms',
     author = 'Tom Spalding',
     author_email = 'tommycs@mail.sfsu.edu',
     license = 'Creative Commons Attribution-ShareAlike 4.0 International License',
-    keywords = ['astronomy', 'asterisms', 'constellations', 'cartography', 'history']
+    keywords = ['astronomy', 'asterisms', 'constellations', 'cartography', 'history'],
     packages = ['asterisms'],
+    package_data = {
+        'vondrak': ['docs/*.rst'],
+    },
+    install_requires = ['numpy', 'skyfield', 'vondrak'],
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
