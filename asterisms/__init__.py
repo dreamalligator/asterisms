@@ -31,11 +31,11 @@ class Constellation(object):
         for star in list(set(self.segs)):
             self.stars.append(hipparcos.get(star))
         self.center = center(self.stars)
-        #self.circumcenter=None
+        self.circumcenter = circumcenter(self.stars)
 
     def __repr__(self):
         """Return a useful textual representation of this Constellation."""
-        return('<asterism.Constellation name=%s abbrev=%s name_alt=%s segs_n=%s center=%s >' % (self.name, self.abbrev, self.name_alt, self.segs_n, self.center))
+        return('<asterism.Constellation name=%s abbrev=%s name_alt=%s segs_n=%s center=%s circumcenter=%s>' % (self.name, self.abbrev, self.name_alt, self.segs_n, self.center, self.circumcenter))
 
 class Boundary():
     """A boundary for a constellation, asterism, or other celestial object.

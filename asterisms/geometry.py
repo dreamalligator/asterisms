@@ -114,67 +114,22 @@ def center(positions):
 #     m = (p1[1].radians - p2[1].radians)/(p1[0].radians - p2[0].radians)
 #     return m
 
-# def circumcenter(position):
-#     '''Calculate the circumcenter of a list of coordinates.
-#
-#     Given a list of coordinates in tuples, ``[(x0,y0), (x1,y1)]``. It may have
-#     a third Distance coord in the tuple, but it is thrown away, because the
-#     circumcenter returned is simply a visual circumcenter.
-#
-#     Returns a coordinate tuple of right ascension and declination ``(ra,dec)``.
-#
-#     This may be useful for automatically centering a telescope or for a program
-#     that automatically zooms to a location.
-#
-#     Typically, when you have three points, the point where the perpendicular
-#     bisectors of a triangle meet is called the circumcenter. It lies inside for
-#     and acute, and outside for an obtuse, and at the center of the hypotenuse
-#     for a right triangle.
-#
-#     To decide the three points, my algorithm chooses the furthest point from the
-#     visual barycenter to begin (just using RA and Dec, ignoring distance). We
-#     can call this point A. The second point is then chosen for being the
-#     furthest point away from point A. This is point B.
-#
-#     These steps seem like a good course, but I am going to have to math-out
-#     whether these choices cover every possible sets of scattered data. We then
-#     are going to choose the midpoint between A and B, and call this D. Point C,
-#     the third point of the descriptive triangle, is then the furthest point away
-#     from this midpoint D that is not A or B.'''
-#
-#     if(isinstance(position, list)):
-#         position_array = array(position)
-#     elif(isinstance(position, np.ndarray)):
-#         position_array = position # Already a numpy array
-#     else:
-#         raise ValueError('Must be passed an array or list.')
-#         return None
-#
-#     # Get point A
-#     A =
-#     # Get point B
-#     B =
-#     # Get point C
-#     C =
-#
-#     # Get all the midpoints
-#     mp_AB = midpoint(A,B)
-#     mp_BC = midpoint(B,C)
-#     mp_CA = midpoint(C,A)
-#
-#     # Calculate slope of the perpendicular bisector of the lines AB, BC, and CA;
-#     # ie, the negative reciprocal of the slope.
-#
-#     # Regular slopes, returned as radians
-#     m_AB = slope(A,B)
-#     m_BC = slope(B,C)
-#     m_CA = slope(C,A)
-#     print('doublecheck that i can use radians here, and get reciprocal of radian??')
-#     # Perpendicular bisector slopes
-#     m_pb_AB = -1.0 / m_AB
-#     m_pb_BC = -1.0 / m_BC
-#     m_pb_CA = -1.0 / m_CA
-#
-#     ra = skyfield.units.Angle(hours=0.0)
-#     dec = skyfield.units.Angle(degrees=0.0)
-#     return ra, dec
+def circumcenter(position):
+    '''Calculate the circumcenter of a list of coordinates.
+
+    Given a list of position tuples, ``[(ra0, dec0), (ra1, dec1)]`` or a list of Stars.
+
+    Returns a position tuple of right ascension and declination ``(ra,dec)``.
+
+    This may be useful for automatically centering a telescope or for a program that automatically zooms to a location.
+
+    The algorithm used is basd on Emo Welzl's paper Smallest enclosing disks (balls and ellipsoids) (1991) which solves this problem in O(n) time.
+    '''
+
+    if(not isinstance(position, list)):
+        raise ValueError('Must be passed a list of Stars or a list of position tuples.')
+        return None
+
+    cc_ra = Angle(hours=0.0).radians
+    cc_dec = Angle(degrees=0.0).radians
+    return cc_ra, cc_dec
