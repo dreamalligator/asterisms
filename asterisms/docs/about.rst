@@ -141,7 +141,7 @@ Draw Bounds
 
 IAU Bounds
 ----------
-`iau bounds <http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/iau-bounds.ipynb>`_ -  A method to plot all IAU constellation bounds. The algorithms amend wrapping discontinuities and account for the poles. Also added functionality to group the constellations and color the polygons.
+`iau bounds <http://nbviewer.ipython.org/github/digitalvapor/asterisms/blob/master/notebooks/iau-bounds.ipynb>`__ -  A method to plot all IAU constellation bounds. The algorithms amend wrapping discontinuities and account for the poles. Also added functionality to group the constellations and color the polygons.
 
 .. image:: https://raw.githubusercontent.com/digitalvapor/asterisms/master/notebooks/images/bounds_family.png
     :alt: iau constellation bounds by family
