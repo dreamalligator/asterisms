@@ -16,12 +16,8 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <p>Asterisms is intended to aid in logging of historical asterisms.
 Whenever possible, I am going to follow conventions of parallel projects
-so that there is the utmost compatibility possible. I think usage and
-facilitating sharing of information is a big part of the project. To
-that end, some of these examples show how to accomplish the equivalent
-<em>without</em> Asterisms. This could be helpful, if you don&#8217;t want an extra
-dependency. It could also help you seamlessly drop in the Asterisms
-project.</p>
+so that there is the utmost compatibility possible. I&#8217;d love to know if
+I should add compatibility to an already existing stellar routine.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
 <span class="k">print</span><span class="p">(</span><span class="s">&#39;using Asterisms version </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">a</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 </pre></div>
@@ -32,7 +28,9 @@ project.</p>
 <div class="section" id="format">
 <h2>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h2>
 <p>A note on format and compatibility. Constellation/asterism format is
-historically based on the Stellarium (who else uses it?)
+historically based on the
+<a class="reference external" href="http://www.stellarium.org/wiki/index.php/Advanced_Use#Sky_Cultures">Stellarium</a>
+or <a class="reference external" href="https://code.google.com/p/pystaratlas/">pystaratlas</a>
 <tt class="docutils literal"><span class="pre">constellationship.fab</span></tt> files. See the R.A. Rey asterism files for
 example. The other asterism format I chose, was because I didn&#8217;t see a
 point in having two files, when you could have one text file.</p>
@@ -184,12 +182,80 @@ is the mean position. This is a tuple of right ascension and declination
 in Skyfield&#8217;s Angle type.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">stars</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
+<span class="c">#TODO: circumcenter not finished yet.</span>
+<span class="c">#print(uma.circumcenter)</span>
+<span class="c">#print(uma.circumcenter_radius)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>[Star(ra_hours=13.398761920264775, dec_degrees=54.925361752393151, ra_mas_per_year=121.23, dec_mas_per_year=-22.01, parallax_mas=41.73, names=[(&#39;HIP&#39;, 65378)]), Star(ra_hours=11.030687999605183, dec_degrees=56.382426786427374, ra_mas_per_year=81.66, dec_mas_per_year=33.74, parallax_mas=41.07, names=[(&#39;HIP&#39;, 53910)]), Star(ra_hours=13.792343787984251, dec_degrees=49.313265059674272, ra_mas_per_year=-121.23, dec_mas_per_year=-15.56, parallax_mas=32.39, names=[(&#39;HIP&#39;, 67301)]), Star(ra_hours=11.897179848125406, dec_degrees=53.694760084185191, ra_mas_per_year=107.76, dec_mas_per_year=11.16, parallax_mas=38.99, names=[(&#39;HIP&#39;, 58001)]), Star(ra_hours=12.257100034120432, dec_degrees=57.032616901786447, ra_mas_per_year=103.56, dec_mas_per_year=7.81, parallax_mas=40.05, names=[(&#39;HIP&#39;, 59774)]), Star(ra_hours=12.900485951888628, dec_degrees=55.959821158352696, ra_mas_per_year=111.74, dec_mas_per_year=-8.99, parallax_mas=40.3, names=[(&#39;HIP&#39;, 62956)]), Star(ra_hours=11.062130192490219, dec_degrees=61.75103320112995, ra_mas_per_year=-136.46, dec_mas_per_year=-35.25, parallax_mas=26.38, names=[(&#39;HIP&#39;, 54061)])]
 (&lt;Angle 12h 20m 02.75s&gt;, &lt;Angle +55deg 34&#39; 47.6&quot;&gt;)
 </pre></div>
 </div>
+</div>
+<div class="section" id="cartography">
+<h3>Cartography<a class="headerlink" href="#cartography" title="Permalink to this headline">¶</a></h3>
+<p>I am going to be adding more advanced cartography functions, but to
+begin with here is some simple functionality. <tt class="docutils literal"><span class="pre">mollweide</span></tt>,
+<tt class="docutils literal"><span class="pre">lambert</span></tt>, <tt class="docutils literal"><span class="pre">hammer</span></tt>, and <tt class="docutils literal"><span class="pre">aitoff</span></tt> projections are supported.</p>
+<p>Below is a <a class="reference external" href="https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection">Lambert azimuthal equal-area
+projection</a>
+of the Big Dipper.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>import asterisms as a
+%pylab inline
+segs = &#39;67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774&#39;
+uma = a.Constellation(name=&#39;Ursa Major&#39;,name_alt=&#39;Big Dipper&#39;,abbrev=&#39;UMA&#39;,segs=segs)
+uma.plot(projection=&#39;lambert&#39;)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+&#39;65378&#39;
+&#39;53910&#39;
+&#39;67301&#39;
+&#39;58001&#39;
+&#39;59774&#39;
+&#39;62956&#39;
+&#39;54061&#39;
+</pre></div>
+</div>
+<img alt="_images/examples_17_1.png" src="_images/examples_17_1.png" />
+<p>The default projection is a <a class="reference external" href="https://en.wikipedia.org/wiki/Mollweide_projection">Mollweide
+projection</a>. Here
+is an example with Orion.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">orion_segs</span> <span class="o">=</span> <span class="s">&#39;26727 26311 26311 25930 28691 29426 29426 29038 29038 27913 27913 28691 29239 28614 28614 27989 27989 26727 26727 27366 24436 25281 25281 25930 25930 25336 25336 25813 25813 26207 25813 27989 25336 22449 22449 22549 22549 22797 22797 23123 22449 22509 22509 22845 22845 22833&#39;</span>
+<span class="n">ori</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Orion&#39;</span><span class="p">,</span><span class="n">name_alt</span><span class="o">=</span><span class="s">&#39;The Hunter&#39;</span><span class="p">,</span><span class="n">abbrev</span><span class="o">=</span><span class="s">&#39;ORI&#39;</span><span class="p">,</span><span class="n">segs</span><span class="o">=</span><span class="n">orion_segs</span><span class="p">)</span>
+<span class="n">ori</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;22549&#39;</span>
+<span class="s">&#39;25336&#39;</span>
+<span class="s">&#39;22449&#39;</span>
+<span class="s">&#39;22797&#39;</span>
+<span class="s">&#39;27913&#39;</span>
+<span class="s">&#39;22509&#39;</span>
+<span class="s">&#39;23123&#39;</span>
+<span class="s">&#39;25281&#39;</span>
+<span class="s">&#39;29239&#39;</span>
+<span class="s">&#39;26727&#39;</span>
+<span class="s">&#39;22833&#39;</span>
+<span class="s">&#39;27366&#39;</span>
+<span class="s">&#39;26311&#39;</span>
+<span class="s">&#39;29038&#39;</span>
+<span class="s">&#39;29426&#39;</span>
+<span class="s">&#39;24436&#39;</span>
+<span class="s">&#39;28691&#39;</span>
+<span class="s">&#39;27989&#39;</span>
+<span class="s">&#39;26207&#39;</span>
+<span class="s">&#39;22845&#39;</span>
+<span class="s">&#39;25813&#39;</span>
+<span class="s">&#39;25930&#39;</span>
+<span class="s">&#39;28614&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/usr/lib/pymodules/python2.7/matplotlib/projections/geo.py:485: RuntimeWarning: invalid value encountered in arcsin
+  theta = np.arcsin(y / np.sqrt(2))
+</pre></div>
+</div>
+<img alt="_images/examples_19_2.png" src="_images/examples_19_2.png" />
 </div>
 </div>
 <div class="section" id="precession">
@@ -201,24 +267,10 @@ projects to this end. If you want to see how to implement the equivalent
 to this from scratch, please see the <tt class="docutils literal"><span class="pre">notebooks</span></tt> section of the
 Asterisms project, or my blog at <a class="reference external" href="http://antivapor.net">DigitalVapor</a>
 where I&#8217;ve posted on it.</p>
-<div class="section" id="create-constellation">
-<h3>Create Constellation<a class="headerlink" href="#create-constellation" title="Permalink to this headline">¶</a></h3>
-<p>This creates a constellation using Asterisms.</p>
-</div>
-<div class="section" id="precess-the-stars">
-<h3>Precess the Stars<a class="headerlink" href="#precess-the-stars" title="Permalink to this headline">¶</a></h3>
-<p>The following precesses the stars of the constellation.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">vondrak</span> <span class="kn">as</span> <span class="nn">v</span>
 <span class="k">print</span><span class="p">(</span><span class="s">&#39;using Vondrak version </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<span class="c">#TODO</span>
 </pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>using Vondrak version 0.03
-</pre></div>
-</div>
-</div>
-<div class="section" id="cartography">
-<h3>Cartography<a class="headerlink" href="#cartography" title="Permalink to this headline">¶</a></h3>
-<p>The following plots the constellation using basemap.</p>
 </div>
 </div>
 <div class="section" id="helper-functions">

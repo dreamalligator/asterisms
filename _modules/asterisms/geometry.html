@@ -110,6 +110,10 @@
 
     <span class="n">ctr</span> <span class="o">=</span> <span class="p">(</span><span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">mean_ra</span><span class="p">,</span> <span class="n">preference</span><span class="o">=</span><span class="s">&#39;hours&#39;</span><span class="p">),</span> <span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">mean_dec</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ctr</span>
+
+<span class="c"># https://en.wikipedia.org/wiki/Machine_epsilon</span>
+<span class="c"># epsilon_f = np.finfo(float).eps</span>
+<span class="c"># epsilon_npf = np.finfo(np.float32).eps</span>
 </div>
 <div class="viewcode-block" id="minidisk"><a class="viewcode-back" href="../../api.html#asterisms.geometry.minidisk">[docs]</a><span class="k">def</span> <span class="nf">minidisk</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Calculate smallest enclosing disk. This computes the smallest enclosing disk of a set of n points in the plane in expected O(n) time.</span>
@@ -122,16 +126,24 @@
 
 <span class="sd">    .. [#]  Welzl, Emo (1991), &quot;`Smallest enclosing disks (balls and ellipsoids) &lt;http://dx.doi.org/10.1007%2FBFb0038202&gt;`_&quot;, in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370&#39;&#39;&#39;</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">P</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">P</span> <span class="ow">is</span> <span class="p">[]):</span>
-        <span class="n">D</span> <span class="o">=</span> <span class="n">minidisk</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">P</span><span class="p">)</span>
-        <span class="n">D</span> <span class="o">=</span> <span class="n">minidisk</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="c"># if(P is None or P is []):</span>
+    <span class="c">#     D = minidisk(None, R)</span>
+    <span class="c"># else:</span>
+    <span class="c">#     p = P.pop()</span>
+    <span class="c">#     print(p,P)</span>
+    <span class="c">#     D = minidisk(P)</span>
+    <span class="c">#</span>
+    <span class="c">#     if(D in locals() and p not in D): #if D is defined and p is not an element of D</span>
+    <span class="c">#         D = minidisk(P, p)</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">D</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">D</span><span class="p">):</span> <span class="c">#if D is defined and p is not an element of D</span>
-            <span class="n">D</span> <span class="o">=</span> <span class="n">minidisk</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">D</span>
+    <span class="c">#temporary</span>
+    <span class="n">ra</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">dec</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">ctr</span> <span class="o">=</span> <span class="p">(</span><span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">ra</span><span class="p">,</span> <span class="n">preference</span><span class="o">=</span><span class="s">&#39;hours&#39;</span><span class="p">),</span> <span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">dec</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ctr</span><span class="p">,</span> <span class="n">radius</span>
 </div>
 <div class="viewcode-block" id="circumcenter"><a class="viewcode-back" href="../../api.html#asterisms.geometry.circumcenter">[docs]</a><span class="k">def</span> <span class="nf">circumcenter</span><span class="p">(</span><span class="n">positions</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Calculate the circumcenter of a list of coordinates.</span>
@@ -150,13 +162,10 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Must be passed a list of Stars or a list of position tuples.&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">None</span>
 
-    <span class="n">p</span> <span class="o">=</span> <span class="n">positions</span>
-    <span class="n">minidisk</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="c"># cc_ra = Angle(hours=0.0).radians</span>
+    <span class="c"># cc_dec = Angle(degrees=0.0).radians</span>
 
-    <span class="n">cc_ra</span> <span class="o">=</span> <span class="n">Angle</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">radians</span>
-    <span class="n">cc_dec</span> <span class="o">=</span> <span class="n">Angle</span><span class="p">(</span><span class="n">degrees</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">radians</span>
-
-    <span class="k">return</span> <span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span></div>
+    <span class="k">return</span> <span class="n">minidisk</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span></div>
 </pre></div>
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

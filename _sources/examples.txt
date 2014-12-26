@@ -4,12 +4,8 @@ Examples
 
 Asterisms is intended to aid in logging of historical asterisms.
 Whenever possible, I am going to follow conventions of parallel projects
-so that there is the utmost compatibility possible. I think usage and
-facilitating sharing of information is a big part of the project. To
-that end, some of these examples show how to accomplish the equivalent
-*without* Asterisms. This could be helpful, if you don't want an extra
-dependency. It could also help you seamlessly drop in the Asterisms
-project.
+so that there is the utmost compatibility possible. I'd love to know if
+I should add compatibility to an already existing stellar routine.
 
 .. code:: python
 
@@ -25,7 +21,9 @@ Format
 ------
 
 A note on format and compatibility. Constellation/asterism format is
-historically based on the Stellarium (who else uses it?)
+historically based on the
+`Stellarium <http://www.stellarium.org/wiki/index.php/Advanced_Use#Sky_Cultures>`__
+or `pystaratlas <https://code.google.com/p/pystaratlas/>`__
 ``constellationship.fab`` files. See the R.A. Rey asterism files for
 example. The other asterism format I chose, was because I didn't see a
 point in having two files, when you could have one text file.
@@ -218,11 +216,96 @@ in Skyfield's Angle type.
 
     print(uma.stars)
     print(uma.center)
+    #TODO: circumcenter not finished yet.
+    #print(uma.circumcenter)
+    #print(uma.circumcenter_radius)
 
 .. parsed-literal::
 
     [Star(ra_hours=13.398761920264775, dec_degrees=54.925361752393151, ra_mas_per_year=121.23, dec_mas_per_year=-22.01, parallax_mas=41.73, names=[('HIP', 65378)]), Star(ra_hours=11.030687999605183, dec_degrees=56.382426786427374, ra_mas_per_year=81.66, dec_mas_per_year=33.74, parallax_mas=41.07, names=[('HIP', 53910)]), Star(ra_hours=13.792343787984251, dec_degrees=49.313265059674272, ra_mas_per_year=-121.23, dec_mas_per_year=-15.56, parallax_mas=32.39, names=[('HIP', 67301)]), Star(ra_hours=11.897179848125406, dec_degrees=53.694760084185191, ra_mas_per_year=107.76, dec_mas_per_year=11.16, parallax_mas=38.99, names=[('HIP', 58001)]), Star(ra_hours=12.257100034120432, dec_degrees=57.032616901786447, ra_mas_per_year=103.56, dec_mas_per_year=7.81, parallax_mas=40.05, names=[('HIP', 59774)]), Star(ra_hours=12.900485951888628, dec_degrees=55.959821158352696, ra_mas_per_year=111.74, dec_mas_per_year=-8.99, parallax_mas=40.3, names=[('HIP', 62956)]), Star(ra_hours=11.062130192490219, dec_degrees=61.75103320112995, ra_mas_per_year=-136.46, dec_mas_per_year=-35.25, parallax_mas=26.38, names=[('HIP', 54061)])]
     (<Angle 12h 20m 02.75s>, <Angle +55deg 34' 47.6">)
+
+
+Cartography
+~~~~~~~~~~~
+
+I am going to be adding more advanced cartography functions, but to
+begin with here is some simple functionality. ``mollweide``,
+``lambert``, ``hammer``, and ``aitoff`` projections are supported.
+
+Below is a `Lambert azimuthal equal-area
+projection <https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection>`__
+of the Big Dipper.
+
+.. code:: python
+
+    import asterisms as a
+    %pylab inline
+    segs = '67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774'
+    uma = a.Constellation(name='Ursa Major',name_alt='Big Dipper',abbrev='UMA',segs=segs)
+    uma.plot(projection='lambert')
+
+.. parsed-literal::
+
+    Populating the interactive namespace from numpy and matplotlib
+    '65378'
+    '53910'
+    '67301'
+    '58001'
+    '59774'
+    '62956'
+    '54061'
+
+
+
+.. image:: examples_files/examples_17_1.png
+
+
+The default projection is a `Mollweide
+projection <https://en.wikipedia.org/wiki/Mollweide_projection>`__. Here
+is an example with Orion.
+
+.. code:: python
+
+    orion_segs = '26727 26311 26311 25930 28691 29426 29426 29038 29038 27913 27913 28691 29239 28614 28614 27989 27989 26727 26727 27366 24436 25281 25281 25930 25930 25336 25336 25813 25813 26207 25813 27989 25336 22449 22449 22549 22549 22797 22797 23123 22449 22509 22509 22845 22845 22833'
+    ori = a.Constellation(name='Orion',name_alt='The Hunter',abbrev='ORI',segs=orion_segs)
+    ori.plot()
+
+.. parsed-literal::
+
+    '22549'
+    '25336'
+    '22449'
+    '22797'
+    '27913'
+    '22509'
+    '23123'
+    '25281'
+    '29239'
+    '26727'
+    '22833'
+    '27366'
+    '26311'
+    '29038'
+    '29426'
+    '24436'
+    '28691'
+    '27989'
+    '26207'
+    '22845'
+    '25813'
+    '25930'
+    '28614'
+
+
+.. parsed-literal::
+
+    /usr/lib/pymodules/python2.7/matplotlib/projections/geo.py:485: RuntimeWarning: invalid value encountered in arcsin
+      theta = np.arcsin(y / np.sqrt(2))
+
+
+
+.. image:: examples_files/examples_19_2.png
 
 
 Precession
@@ -236,33 +319,11 @@ to this from scratch, please see the ``notebooks`` section of the
 Asterisms project, or my blog at `DigitalVapor <http://antivapor.net>`__
 where I've posted on it.
 
-Create Constellation
-~~~~~~~~~~~~~~~~~~~~
-
-This creates a constellation using Asterisms.
-
-
-Precess the Stars
-~~~~~~~~~~~~~~~~~
-
-The following precesses the stars of the constellation.
-
 .. code:: python
 
     import vondrak as v
     print('using Vondrak version %s' % v.__version__)
-
-.. parsed-literal::
-
-    using Vondrak version 0.03
-
-
-Cartography
-~~~~~~~~~~~
-
-The following plots the constellation using basemap.
-
-
+    #TODO
 Helper Functions
 ----------------
 
