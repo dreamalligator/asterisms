@@ -15,7 +15,6 @@
     <h1>Source code for asterisms.geometry</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">skyfield</span>
 <span class="kn">from</span> <span class="nn">skyfield.units</span> <span class="kn">import</span> <span class="n">Angle</span><span class="p">,</span> <span class="n">Distance</span>
-<span class="c">#from skyfield.starlib import Star</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
 
@@ -111,88 +110,53 @@
 
     <span class="n">ctr</span> <span class="o">=</span> <span class="p">(</span><span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">mean_ra</span><span class="p">,</span> <span class="n">preference</span><span class="o">=</span><span class="s">&#39;hours&#39;</span><span class="p">),</span> <span class="n">Angle</span><span class="p">(</span><span class="n">radians</span><span class="o">=</span><span class="n">mean_dec</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ctr</span>
+</div>
+<div class="viewcode-block" id="minidisk"><a class="viewcode-back" href="../../api.html#asterisms.geometry.minidisk">[docs]</a><span class="k">def</span> <span class="nf">minidisk</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculate smallest enclosing disk. This computes the smallest enclosing disk of a set of n points in the plane in expected O(n) time.</span>
 
-<span class="c"># def slope(p1, p2):</span>
-<span class="c">#     &#39;&#39;&#39;The slope between two points</span>
-<span class="c">#</span>
-<span class="c">#     Given two points as tuples. If a third distance coord is passed, it is</span>
-<span class="c">#     ignored.</span>
-<span class="c">#</span>
-<span class="c">#     Returns the slope as delta-Dec/delta-RA in radians.</span>
-<span class="c">#</span>
-<span class="c">#     This is simply a visual slope helper function.&#39;&#39;&#39;</span>
-<span class="c">#</span>
-<span class="c">#     if(not isinstance(p1, tuple) or not isinstance(p2, tuple)):</span>
-<span class="c">#         raise ValueError(&#39;Can only pass two tuples to this function.&#39;)</span>
-<span class="c">#         return None</span>
-<span class="c">#</span>
-<span class="c">#     m = (p1[1].radians - p2[1].radians)/(p1[0].radians - p2[0].radians)</span>
-<span class="c">#     return m</span>
+<span class="sd">    Given a set P of n points.</span>
 
-<span class="c"># def circumcenter(position):</span>
-<span class="c">#     &#39;&#39;&#39;Calculate the circumcenter of a list of coordinates.</span>
-<span class="c">#</span>
-<span class="c">#     Given a list of coordinates in tuples, ``[(x0,y0), (x1,y1)]``. It may have</span>
-<span class="c">#     a third Distance coord in the tuple, but it is thrown away, because the</span>
-<span class="c">#     circumcenter returned is simply a visual circumcenter.</span>
-<span class="c">#</span>
-<span class="c">#     Returns a coordinate tuple of right ascension and declination ``(ra,dec)``.</span>
-<span class="c">#</span>
-<span class="c">#     This may be useful for automatically centering a telescope or for a program</span>
-<span class="c">#     that automatically zooms to a location.</span>
-<span class="c">#</span>
-<span class="c">#     Typically, when you have three points, the point where the perpendicular</span>
-<span class="c">#     bisectors of a triangle meet is called the circumcenter. It lies inside for</span>
-<span class="c">#     and acute, and outside for an obtuse, and at the center of the hypotenuse</span>
-<span class="c">#     for a right triangle.</span>
-<span class="c">#</span>
-<span class="c">#     To decide the three points, my algorithm chooses the furthest point from the</span>
-<span class="c">#     visual barycenter to begin (just using RA and Dec, ignoring distance). We</span>
-<span class="c">#     can call this point A. The second point is then chosen for being the</span>
-<span class="c">#     furthest point away from point A. This is point B.</span>
-<span class="c">#</span>
-<span class="c">#     These steps seem like a good course, but I am going to have to math-out</span>
-<span class="c">#     whether these choices cover every possible sets of scattered data. We then</span>
-<span class="c">#     are going to choose the midpoint between A and B, and call this D. Point C,</span>
-<span class="c">#     the third point of the descriptive triangle, is then the furthest point away</span>
-<span class="c">#     from this midpoint D that is not A or B.&#39;&#39;&#39;</span>
-<span class="c">#</span>
-<span class="c">#     if(isinstance(position, list)):</span>
-<span class="c">#         position_array = array(position)</span>
-<span class="c">#     elif(isinstance(position, np.ndarray)):</span>
-<span class="c">#         position_array = position # Already a numpy array</span>
-<span class="c">#     else:</span>
-<span class="c">#         raise ValueError(&#39;Must be passed an array or list.&#39;)</span>
-<span class="c">#         return None</span>
-<span class="c">#</span>
-<span class="c">#     # Get point A</span>
-<span class="c">#     A =</span>
-<span class="c">#     # Get point B</span>
-<span class="c">#     B =</span>
-<span class="c">#     # Get point C</span>
-<span class="c">#     C =</span>
-<span class="c">#</span>
-<span class="c">#     # Get all the midpoints</span>
-<span class="c">#     mp_AB = midpoint(A,B)</span>
-<span class="c">#     mp_BC = midpoint(B,C)</span>
-<span class="c">#     mp_CA = midpoint(C,A)</span>
-<span class="c">#</span>
-<span class="c">#     # Calculate slope of the perpendicular bisector of the lines AB, BC, and CA;</span>
-<span class="c">#     # ie, the negative reciprocal of the slope.</span>
-<span class="c">#</span>
-<span class="c">#     # Regular slopes, returned as radians</span>
-<span class="c">#     m_AB = slope(A,B)</span>
-<span class="c">#     m_BC = slope(B,C)</span>
-<span class="c">#     m_CA = slope(C,A)</span>
-<span class="c">#     print(&#39;doublecheck that i can use radians here, and get reciprocal of radian??&#39;)</span>
-<span class="c">#     # Perpendicular bisector slopes</span>
-<span class="c">#     m_pb_AB = -1.0 / m_AB</span>
-<span class="c">#     m_pb_BC = -1.0 / m_BC</span>
-<span class="c">#     m_pb_CA = -1.0 / m_CA</span>
-<span class="c">#</span>
-<span class="c">#     ra = skyfield.units.Angle(hours=0.0)</span>
-<span class="c">#     dec = skyfield.units.Angle(degrees=0.0)</span>
-<span class="c">#     return ra, dec</span></div>
+<span class="sd">    Returns the closed disk of smallest radius containning all points in P. The values returned are a tuple of center, and the radius.</span>
+
+<span class="sd">    The algorithm used is based on Emo Welzl&#39;s paper [#]_ which solves this problem in O(n) time. See `smallest-circle problem &lt;https://en.wikipedia.org/wiki/Smallest-circle_problem&gt;`_.</span>
+
+<span class="sd">    .. [#]  Welzl, Emo (1991), &quot;`Smallest enclosing disks (balls and ellipsoids) &lt;http://dx.doi.org/10.1007%2FBFb0038202&gt;`_&quot;, in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370&#39;&#39;&#39;</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">P</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">P</span> <span class="ow">is</span> <span class="p">[]):</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">minidisk</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">P</span><span class="p">)</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">minidisk</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">D</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">D</span><span class="p">):</span> <span class="c">#if D is defined and p is not an element of D</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">minidisk</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">D</span>
+</div>
+<div class="viewcode-block" id="circumcenter"><a class="viewcode-back" href="../../api.html#asterisms.geometry.circumcenter">[docs]</a><span class="k">def</span> <span class="nf">circumcenter</span><span class="p">(</span><span class="n">positions</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculate the circumcenter of a list of coordinates.</span>
+
+<span class="sd">    Given a list of position tuples, ``[(ra0, dec0), (ra1, dec1)]`` or a list of Stars.</span>
+
+<span class="sd">    Returns a position tuple of right ascension and declination ``(ra,dec)``.</span>
+
+<span class="sd">    This may be useful for automatically centering a telescope or for a program that automatically zooms to a location.</span>
+
+<span class="sd">    The algorithm used is based on Emo Welzl&#39;s paper [#]_ which solves this problem in O(n) time. See `smallest-circle problem &lt;https://en.wikipedia.org/wiki/Smallest-circle_problem&gt;`_.</span>
+
+<span class="sd">    .. [#]  Welzl, Emo (1991), &quot;`Smallest enclosing disks (balls and ellipsoids) &lt;http://dx.doi.org/10.1007%2FBFb0038202&gt;`_&quot;, in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370&#39;&#39;&#39;</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Must be passed a list of Stars or a list of position tuples.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="n">positions</span>
+    <span class="n">minidisk</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="n">cc_ra</span> <span class="o">=</span> <span class="n">Angle</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">radians</span>
+    <span class="n">cc_dec</span> <span class="o">=</span> <span class="n">Angle</span><span class="p">(</span><span class="n">degrees</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">radians</span>
+
+    <span class="k">return</span> <span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span></div>
 </pre></div>
     <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

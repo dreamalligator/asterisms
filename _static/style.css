@@ -85,8 +85,10 @@ a {
 pre a {text-decoration: none;}
 pre a:hover {text-decoration: underline;}
 .math span{ color: black;}
-.reference {padding-left: 5px;}
-
+/*.reference {padding-left: 5px;}*/
+img {
+    max-width: 100%;
+}
 /* pip install pygments-style-solarized
 pygmentize -S solarizeddark -f html > solarizeddark.css */
 .hll { background-color: #ffffcc }
