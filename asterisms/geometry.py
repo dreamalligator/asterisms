@@ -1,6 +1,5 @@
 import skyfield
 from skyfield.units import Angle, Distance
-#from skyfield.starlib import Star
 import numpy as np
 from numpy import array
 
@@ -97,24 +96,41 @@ def center(positions):
     ctr = (Angle(radians=mean_ra, preference='hours'), Angle(radians=mean_dec, signed=True))
     return ctr
 
-# def slope(p1, p2):
-#     '''The slope between two points
-#
-#     Given two points as tuples. If a third distance coord is passed, it is
-#     ignored.
-#
-#     Returns the slope as delta-Dec/delta-RA in radians.
-#
-#     This is simply a visual slope helper function.'''
-#
-#     if(not isinstance(p1, tuple) or not isinstance(p2, tuple)):
-#         raise ValueError('Can only pass two tuples to this function.')
-#         return None
-#
-#     m = (p1[1].radians - p2[1].radians)/(p1[0].radians - p2[0].radians)
-#     return m
+# https://en.wikipedia.org/wiki/Machine_epsilon
+# epsilon_f = np.finfo(float).eps
+# epsilon_npf = np.finfo(np.float32).eps
 
-def circumcenter(position):
+def minidisk(P):
+    '''Calculate smallest enclosing disk. This computes the smallest enclosing disk of a set of n points in the plane in expected O(n) time.
+
+    Given a set P of n points.
+
+    Returns the closed disk of smallest radius containning all points in P. The values returned are a tuple of center, and the radius.
+
+    The algorithm used is based on Emo Welzl's paper [#]_ which solves this problem in O(n) time. See `smallest-circle problem <https://en.wikipedia.org/wiki/Smallest-circle_problem>`_.
+
+    .. [#]  Welzl, Emo (1991), "`Smallest enclosing disks (balls and ellipsoids) <http://dx.doi.org/10.1007%2FBFb0038202>`_", in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370'''
+
+    # if(P is None or P is []):
+    #     D = minidisk(None, R)
+    # else:
+    #     p = P.pop()
+    #     print(p,P)
+    #     D = minidisk(P)
+    #
+    #     if(D in locals() and p not in D): #if D is defined and p is not an element of D
+    #         D = minidisk(P, p)
+
+    #temporary
+    ra = 0.0
+    dec = 0.0
+    radius = 0.0
+
+    ctr = (Angle(radians=ra, preference='hours'), Angle(radians=dec, signed=True))
+    radius = Angle(radians=radius, signed=True)
+    return ctr, radius
+
+def circumcenter(positions):
     '''Calculate the circumcenter of a list of coordinates.
 
     Given a list of position tuples, ``[(ra0, dec0), (ra1, dec1)]`` or a list of Stars.
@@ -123,13 +139,15 @@ def circumcenter(position):
 
     This may be useful for automatically centering a telescope or for a program that automatically zooms to a location.
 
-    The algorithm used is basd on Emo Welzl's paper Smallest enclosing disks (balls and ellipsoids) (1991) which solves this problem in O(n) time.
-    '''
+    The algorithm used is based on Emo Welzl's paper [#]_ which solves this problem in O(n) time. See `smallest-circle problem <https://en.wikipedia.org/wiki/Smallest-circle_problem>`_.
 
-    if(not isinstance(position, list)):
+    .. [#]  Welzl, Emo (1991), "`Smallest enclosing disks (balls and ellipsoids) <http://dx.doi.org/10.1007%2FBFb0038202>`_", in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370'''
+
+    if(not isinstance(positions, list)):
         raise ValueError('Must be passed a list of Stars or a list of position tuples.')
         return None
 
-    cc_ra = Angle(hours=0.0).radians
-    cc_dec = Angle(degrees=0.0).radians
-    return cc_ra, cc_dec
+    # cc_ra = Angle(hours=0.0).radians
+    # cc_dec = Angle(degrees=0.0).radians
+
+    return minidisk(positions)

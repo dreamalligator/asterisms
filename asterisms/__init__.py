@@ -1,5 +1,6 @@
 import skyfield
-from .geometry import center
+from .geometry import center, circumcenter
+from .cartography import plot
 from skyfield.data import hipparcos
 
 __version__ = 0.02
@@ -31,11 +32,15 @@ class Constellation(object):
         for star in list(set(self.segs)):
             self.stars.append(hipparcos.get(star))
         self.center = center(self.stars)
-        self.circumcenter = circumcenter(self.stars)
+        self.circumcenter, self.circumcenter_radius = circumcenter(self.stars)
+
+    def plot(self, projection='mollweide'):
+        cartography.plot(self.stars, title=self.name, projection=projection)
+        return
 
     def __repr__(self):
         """Return a useful textual representation of this Constellation."""
-        return('<asterism.Constellation name=%s abbrev=%s name_alt=%s segs_n=%s center=%s circumcenter=%s>' % (self.name, self.abbrev, self.name_alt, self.segs_n, self.center, self.circumcenter))
+        return('<asterism.Constellation name=%s abbrev=%s name_alt=%s segs_n=%s center=%s circumcenter=%s circumcenter_radius=%s>' % (self.name, self.abbrev, self.name_alt, self.segs_n, self.center, self.circumcenter, self.circumcenter_radius))
 
 class Boundary():
     """A boundary for a constellation, asterism, or other celestial object.
