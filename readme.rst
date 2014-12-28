@@ -4,25 +4,26 @@
 .. image:: http://bottlepy.org/docs/dev/_static/Gittip.png
     :target: https://gratipay.com/digitalvapor
 
-For eons, man has looked up at the night sky. What did they see before 1922?
-
 *View the night sky as ancient man did.*
 
-Dependencies
-============
-There are three dependencies for Asterisms.
-
-* `Numpy <http://www.numpy.org>`_ - ``pip install numpy``
-* `Skyfield <http://rhodesmill.org/skyfield/>`_ - ``pip install skyfield``
-* `Vondrak <https://digitalvapor.github.io/vondrak/>`_ - ``pip install vondrak``
-
-If you have any problems with installation, or would like to suggest an improvement, simply create an issue on the project's Github page:
-
-    https://github.com/digitalvapor/asterisms
+For eons, man has looked up at the night sky. What did they see before 1922?
 
 Documentation
 =============
 You can view the documentation at `digitalvapor.github.io/asterisms <https://digitalvapor.github.io/asterisms>`_.
+
+If you have any problems with installation, or would like to suggest an improvement, simply create an issue on the project's Github page:
+
+https://github.com/digitalvapor/asterisms
+
+Dependencies
+============
+There are a few dependencies for Asterisms. Numpy and Skyfield should be enough for the minimal inner workings. Vondrak is needed if you wish to precess any stars throughout history. Matplotlib is used with the basic cartography methods.
+
+* `Numpy <http://www.numpy.org>`_ - ``pip install numpy``
+* `Skyfield <http://rhodesmill.org/skyfield/>`_ - ``pip install skyfield``
+* `Vondrak <https://digitalvapor.github.io/vondrak/>`_ - ``pip install vondrak``
+* `Maplotlib <http://matplotlib.org/>`_ - ``pip install matplotlib``
 
 Fork
 ====

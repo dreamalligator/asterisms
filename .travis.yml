@@ -1,10 +1,7 @@
 language: python
-python: ['2.6','2.7','3.2','3.3','3.4']
+python: ['2.6','2.7','3.3','3.4'] # 3.2 doesn't play well with the serial pip install of matplotlib(?)
 
 install:
-    - pip install skyfield
-    - pip install matplotlib
-    #- pip install vondrak
-    #- pip install .
+    - pip install --use-mirrors skyfield matplotlib
 script:
     - nosetests

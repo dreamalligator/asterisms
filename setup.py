@@ -20,7 +20,7 @@ setup(
     package_data = {
         'vondrak': ['docs/*.rst'],
     },
-    install_requires = ['numpy', 'skyfield', 'vondrak'],
+    install_requires = ['numpy', 'skyfield', 'vondrak', 'matplotlib'],
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
