@@ -216,14 +216,157 @@ in Skyfield's Angle type.
 
     print(uma.stars)
     print(uma.center)
-    #TODO: circumcenter not finished yet.
-    #print(uma.circumcenter)
-    #print(uma.circumcenter_radius)
+    print(uma.circumcenter)
+    print(uma.circumcenter_radius)
 
 .. parsed-literal::
 
     [Star(ra_hours=13.398761920264775, dec_degrees=54.925361752393151, ra_mas_per_year=121.23, dec_mas_per_year=-22.01, parallax_mas=41.73, names=[('HIP', 65378)]), Star(ra_hours=11.030687999605183, dec_degrees=56.382426786427374, ra_mas_per_year=81.66, dec_mas_per_year=33.74, parallax_mas=41.07, names=[('HIP', 53910)]), Star(ra_hours=13.792343787984251, dec_degrees=49.313265059674272, ra_mas_per_year=-121.23, dec_mas_per_year=-15.56, parallax_mas=32.39, names=[('HIP', 67301)]), Star(ra_hours=11.897179848125406, dec_degrees=53.694760084185191, ra_mas_per_year=107.76, dec_mas_per_year=11.16, parallax_mas=38.99, names=[('HIP', 58001)]), Star(ra_hours=12.257100034120432, dec_degrees=57.032616901786447, ra_mas_per_year=103.56, dec_mas_per_year=7.81, parallax_mas=40.05, names=[('HIP', 59774)]), Star(ra_hours=12.900485951888628, dec_degrees=55.959821158352696, ra_mas_per_year=111.74, dec_mas_per_year=-8.99, parallax_mas=40.3, names=[('HIP', 62956)]), Star(ra_hours=11.062130192490219, dec_degrees=61.75103320112995, ra_mas_per_year=-136.46, dec_mas_per_year=-35.25, parallax_mas=26.38, names=[('HIP', 54061)])]
     (<Angle 12h 20m 02.75s>, <Angle +55deg 34' 47.6">)
+    (<Angle 12h 25m 38.05s>, <Angle +55deg 31' 55.7">)
+    21deg 24' 00.5"
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - No Stars
+    from asterisms.geometry import Minidisk
+    md = Minidisk()
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    ((None, None), <Angle 00deg 00' 00.0">)
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - Single Star
+    from asterisms.geometry import Minidisk
+    from skyfield.data import hipparcos
+    single_star = [hipparcos.get('59774')]
+    md = Minidisk(points = single_star)
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    '59774'
+    ((<Angle 12h 15m 25.56s>, <Angle +57deg 01' 57.4">), <Angle 00deg 00' 00.0">)
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - Two Stars
+    from asterisms.geometry import Minidisk
+    from skyfield.data import hipparcos
+    two_stars = [hipparcos.get('59774'),hipparcos.get('54061')]
+    md = Minidisk(points = two_stars)
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    '59774'
+    '54061'
+    ((<Angle 11h 39m 34.61s>, <Angle +59deg 23' 30.6">), <Angle 09deg 16' 03.3">)
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - Three Stars
+    from asterisms.geometry import Minidisk
+    from skyfield.data import hipparcos
+    three_stars = [hipparcos.get('59774'),hipparcos.get('54061'),hipparcos.get('53910')]
+    md = Minidisk(points = three_stars)
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    '59774'
+    '54061'
+    '53910'
+    ((<Angle 11h 38m 24.64s>, <Angle +58deg 17' 03.4">), <Angle 09deg 20' 17.1">)
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - A whole constellation
+    import asterisms as a
+    from asterisms.geometry import Minidisk
+    segs = '67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774'
+    uma = a.Constellation(name='Ursa Major',name_alt='Big Dipper',abbrev='UMA',segs=segs)
+    md = Minidisk(points = uma.stars)
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    '65378'
+    '53910'
+    '67301'
+    '58001'
+    '59774'
+    '62956'
+    '54061'
+    ((<Angle 12h 25m 38.05s>, <Angle +55deg 31' 55.7">), <Angle 21deg 24' 00.5">)
+
+
+We see that the value is the same for Constellation.circumcenter
+calculated uses this Minidisk function.
+
+.. code:: python
+
+    %pylab inline
+
+.. parsed-literal::
+
+    Populating the interactive namespace from numpy and matplotlib
+
+
+.. code:: python
+
+    import asterisms as a
+    segs = '67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774'
+    uma = a.Constellation(name='Ursa Major',name_alt='Big Dipper',abbrev='UMA',segs=segs)
+    print(uma.circumcenter, uma.circumcenter_radius)
+
+.. parsed-literal::
+
+    '65378'
+    '53910'
+    '67301'
+    '58001'
+    '59774'
+    '62956'
+    '54061'
+    ((<Angle 12h 25m 38.05s>, <Angle +55deg 31' 55.7">), <Angle 21deg 24' 00.5">)
+
+
+You can plot circles in the non-equirectangular projections, but I don't
+recommend it, because it is very distorted. Below we see the Big Dipper
+in blue, and the circumcenter in red. The circle plotted is the minimum
+enclosing disk calculated using Welzl's algorithm. This could be useful
+for automatically zooming a telescope to a constellation, while ensuring
+that the whole constellation is visible.
+
+.. code:: python
+
+    import matplotlib.pyplot as plt
+    from asterisms.cartography import init_plot, plot, plot_circle
+    
+    f, ax1 = init_plot(figsize=(10,4))
+    plot(uma.stars, ax1, color='blue', projection=None)
+    plot([uma.circumcenter], ax1, color='red', projection=None)
+    plot_circle(center=uma.circumcenter, radius=uma.circumcenter_radius, ax=ax1, lw=4, alpha=0.6, projection=None)
+
+
+
+.. parsed-literal::
+
+    <matplotlib.patches.Circle at 0x7f9bfcbfd390>
+
+
+
+
+.. image:: examples_files/examples_25_1.png
 
 
 Cartography
@@ -257,8 +400,14 @@ of the Big Dipper.
     '54061'
 
 
+.. parsed-literal::
 
-.. image:: examples_files/examples_17_1.png
+    WARNING: pylab import has clobbered these variables: ['plot', 'f']
+    `%matplotlib` prevents importing * from pylab and numpy
+
+
+
+.. image:: examples_files/examples_27_2.png
 
 
 The default projection is a `Mollweide
@@ -305,7 +454,7 @@ is an example with Orion.
 
 
 
-.. image:: examples_files/examples_19_2.png
+.. image:: examples_files/examples_29_2.png
 
 
 Precession
@@ -324,6 +473,12 @@ where I've posted on it.
     import vondrak as v
     print('using Vondrak version %s' % v.__version__)
     #TODO
+
+.. parsed-literal::
+
+    using Vondrak version 0.03
+
+
 Helper Functions
 ----------------
 
@@ -364,5 +519,4 @@ probably be moved over to the test section.
     (<Angle 03h 08m 10.13s>, <Angle +40deg 57' 20.3">)
     (<Angle 13h 23m 55.50s>, <Angle +54deg 55' 31.0">)
     (<Angle 08h 16m 02.82s>, <Angle +47deg 56' 25.7">)
-
 

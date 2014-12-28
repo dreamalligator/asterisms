@@ -59,20 +59,6 @@ class Boundary():
         """Return a useful textual representation of this Boundary."""
         return('<asterism.Boundary>')
 
-def star(name, *args, **kwargs):
-    """Load the mini star database and return a star."""
-    global star
-    import asterisms.stars
-    star = asterisms.stars.star
-    return star(name, *args, **kwargs)
-
-def asterism(name):
-    """Load the asterism database and return an asterism."""
-    global asterism
-    import asterisms.asterisms
-    asterism = asterisms.asterisms.asterism
-    return asterism(name)
-
 # expand/minimize database
 # query Hipparcos catalog
 # query other catalogs
