@@ -1,0 +1,416 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>&lt;no title&gt;</title>
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
+</head>
+<body>
+    
+    <p>
+        <a href="."><h3>Home</h3></a>
+    </p>
+    
+    <p>The usage is to set projection to the values below. An example, after
+initializing a constellation <tt class="docutils literal"><span class="pre">uma</span></tt> is to plot with
+<tt class="docutils literal"><span class="pre">uma.plot(projection='lambert')</span></tt>.</p>
+<p><strong>Basic Projection Covered</strong> *
+<a class="reference external" href="https://en.wikipedia.org/wiki/Aitoff_projection">Aitoff</a> -
+<tt class="docutils literal"><span class="pre">aitoff</span></tt> *
+<a class="reference external" href="https://en.wikipedia.org/wiki/Hammer_projection">Hammer</a> -
+<tt class="docutils literal"><span class="pre">hammer</span></tt> * <a class="reference external" href="https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection">Lambert Azimuthal Equal-Area
+Projection</a>
+- <tt class="docutils literal"><span class="pre">lambert</span></tt> *
+<a class="reference external" href="https://en.wikipedia.org/wiki/Mollweide_projection">Mollweide</a> -
+<tt class="docutils literal"><span class="pre">mollweide</span></tt></p>
+<div class="code python highlight-python"><div class="highlight"><pre>%pylab inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
+<span class="n">segs</span> <span class="o">=</span> <span class="s">&#39;67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774&#39;</span>
+<span class="n">uma</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Ursa Major&#39;</span><span class="p">,</span><span class="n">name_alt</span><span class="o">=</span><span class="s">&#39;Big Dipper&#39;</span><span class="p">,</span><span class="n">abbrev</span><span class="o">=</span><span class="s">&#39;UMA&#39;</span><span class="p">,</span><span class="n">segs</span><span class="o">=</span><span class="n">segs</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">,</span> <span class="n">uma</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;65378&#39;
+&#39;53910&#39;
+&#39;67301&#39;
+&#39;58001&#39;
+&#39;59774&#39;
+&#39;62956&#39;
+&#39;54061&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+((&lt;Angle 12h 25m 38.05s&gt;, &lt;Angle +55deg 31&#39; 55.7&quot;&gt;), &lt;Angle 21deg 24&#39; 00.5&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">asterisms.cartography</span> <span class="kn">import</span> <span class="n">init_plot</span><span class="p">,</span> <span class="n">plot</span><span class="p">,</span> <span class="n">plot_circle</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">init_plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">stars</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">([</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">],</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">plot_circle</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.patches.Circle at 0x7f0f06620550&gt;
+</pre></div>
+</div>
+<img alt="_images/projections_3_1.png" src="_images/projections_3_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">uma</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s">&#39;lambert&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/projections_4_0.png" src="_images/projections_4_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
+<span class="n">orion_segs</span> <span class="o">=</span> <span class="s">&#39;26727 26311 26311 25930 28691 29426 29426 29038 29038 27913 27913 28691 29239 28614 28614 27989 27989 26727 26727 27366 24436 25281 25281 25930 25930 25336 25336 25813 25813 26207 25813 27989 25336 22449 22449 22549 22549 22797 22797 23123 22449 22509 22509 22845 22845 22833&#39;</span>
+<span class="n">ori</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Orion&#39;</span><span class="p">,</span><span class="n">name_alt</span><span class="o">=</span><span class="s">&#39;The Hunter&#39;</span><span class="p">,</span><span class="n">abbrev</span><span class="o">=</span><span class="s">&#39;ORI&#39;</span><span class="p">,</span><span class="n">segs</span><span class="o">=</span><span class="n">orion_segs</span><span class="p">)</span>
+<span class="n">ori</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;22549&#39;
+&#39;25336&#39;
+&#39;22449&#39;
+&#39;22797&#39;
+&#39;27913&#39;
+&#39;22509&#39;
+&#39;23123&#39;
+&#39;25281&#39;
+&#39;29239&#39;
+&#39;26727&#39;
+&#39;22833&#39;
+&#39;27366&#39;
+&#39;26311&#39;
+&#39;29038&#39;
+&#39;29426&#39;
+&#39;24436&#39;
+&#39;28691&#39;
+&#39;27989&#39;
+&#39;26207&#39;
+&#39;22845&#39;
+&#39;25813&#39;
+&#39;25930&#39;
+&#39;28614&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/usr/lib/pymodules/python2.7/matplotlib/projections/geo.py:485: RuntimeWarning: invalid value encountered in arcsin
+  theta = np.arcsin(y / np.sqrt(2))
+</pre></div>
+</div>
+<img alt="_images/projections_5_2.png" src="_images/projections_5_2.png" />
+<p><strong>Not Supported Yet</strong> *
+<a class="reference external" href="https://en.wikipedia.org/wiki/Lambert_conformal_conic_projection">https://en.wikipedia.org/wiki/Lambert_conformal_conic_projection</a> *
+<a class="reference external" href="https://en.wikipedia.org/wiki/Lambert_cylindrical_equal-area_projection">https://en.wikipedia.org/wiki/Lambert_cylindrical_equal-area_projection</a>
+* <a class="reference external" href="https://en.wikipedia.org/wiki/Stereographic_projection">Stereographic
+Projection</a></p>
+<p><strong>Examples and Goals for me</strong> * Pierre Barbier&#8217;s <a class="reference external" href="http://www.pbarbier.com/constellations/maps.html">Constellation
+Maps</a> * All-Sky
+Plot: <a class="reference external" href="https://leejjoon.github.io/matplotlib_astronomy_gallery/healpix/allsky_galactic_proj.html">Galactic plane in All Sky
+Maps</a>
+(CYP, CEA, CAR, MER, SFL, PAR, MOL), <a class="reference external" href="https://leejjoon.github.io/matplotlib_astronomy_gallery/cfasurvey/cfasurvey.html">CfA
+Survey</a>,
+<a class="reference external" href="https://leejjoon.github.io/matplotlib_astronomy_gallery/allsky/allsky.html">WHAM</a>
+* Pystaratlas&#8217; project <a class="reference external" href="https://code.google.com/p/pystaratlas/downloads/detail?name=proj_output_example.pdf">output
+example</a>
+* <a class="reference external" href="http://www.xubuntix.org/weblog/2009/01/python-astronomy-and-maps">http://www.xubuntix.org/weblog/2009/01/python-astronomy-and-maps</a> *
+<a class="reference external" href="https://www.astro.rug.nl/software/kapteyn/">https://www.astro.rug.nl/software/kapteyn/</a> *
+<a class="reference external" href="http://matplotlib.org/basemap/users/mapsetup.html">http://matplotlib.org/basemap/users/mapsetup.html</a> *
+<a class="reference external" href="http://matplotlib.org/basemap/users/examples.html">http://matplotlib.org/basemap/users/examples.html</a> *
+<a class="reference external" href="http://matplotlib.org/basemap/api/basemap_api.html">http://matplotlib.org/basemap/api/basemap_api.html</a> *
+<a class="reference external" href="https://en.wikipedia.org/wiki/World_Geodetic_System">https://en.wikipedia.org/wiki/World_Geodetic_System</a> *
+<a class="reference external" href="https://github.com/matplotlib/basemap/blob/master/examples/allskymap.py">https://github.com/matplotlib/basemap/blob/master/examples/allskymap.py</a></p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+
+<span class="n">width</span> <span class="o">=</span> <span class="mi">5000000</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;aeqd&#39;</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="mf">80.0</span><span class="p">)</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="mi">81</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">])</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">ori</span><span class="o">.</span><span class="n">stars</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/projections_7_0.png" src="_images/projections_7_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Visual Center</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mi">5000000</span>
+<span class="p">(</span><span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span><span class="p">)</span> <span class="o">=</span> <span class="n">ori</span><span class="o">.</span><span class="n">center</span>
+<span class="n">cc_x</span> <span class="o">=</span> <span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span>
+<span class="n">cc_y</span> <span class="o">=</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;aeqd&#39;</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">cc_y</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">cc_x</span><span class="p">)</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="mi">81</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">])</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">ori</span><span class="o">.</span><span class="n">stars</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/projections_8_0.png" src="_images/projections_8_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># This example zooms to the circumcenter and converts the radius of the smallest enclosing disk to meters (because thats what Basemap wants, and doubles it for width).</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+
+<span class="n">R_EARTH</span> <span class="o">=</span> <span class="mf">6370997.0</span> <span class="c">#default is arithmetic mean radius of the earth, force this value for sanity or if want to use a different value.</span>
+<span class="n">TAU</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span>
+
+<span class="k">def</span> <span class="nf">r2m</span><span class="p">(</span><span class="n">radians</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Converts radians to meters using the arithmetic mean radius of the earth.</span>
+
+<span class="sd">    The default Basemap sphere radius is 6370997 meters. See `rsphere &lt;http://matplotlib.org/basemap/api/basemap_api.html&gt;`_</span>
+
+<span class="sd">    This is *only* intended as a helper for the Basemap functions which take widths in meters.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">radians</span><span class="o">*</span><span class="n">radius</span>
+
+<span class="c">#use the circumcenter to center</span>
+<span class="p">(</span><span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span><span class="p">)</span> <span class="o">=</span> <span class="n">ori</span><span class="o">.</span><span class="n">circumcenter</span>
+<span class="n">cc_x</span> <span class="o">=</span> <span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span>
+<span class="n">cc_y</span> <span class="o">=</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span>
+<span class="n">width</span><span class="o">=</span><span class="n">r2m</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="o">.</span><span class="n">radians</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+<span class="k">print</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;aeqd&#39;</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">cc_y</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">cc_x</span><span class="p">,</span> <span class="n">rsphere</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">)</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="mi">81</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">])</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">ori</span><span class="o">.</span><span class="n">stars</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">3389492.74537</span>
+</pre></div>
+</div>
+<img alt="_images/projections_9_1.png" src="_images/projections_9_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">patches</span>
+<span class="c">#use the circumcenter to center</span>
+<span class="p">(</span><span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span><span class="p">)</span> <span class="o">=</span> <span class="n">ori</span><span class="o">.</span><span class="n">circumcenter</span>
+<span class="n">cc_x</span> <span class="o">=</span> <span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span>
+<span class="n">cc_y</span> <span class="o">=</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span>
+<span class="n">width</span><span class="o">=</span><span class="n">r2m</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="o">.</span><span class="n">radians</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">frameon</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;aeqd&#39;</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">cc_y</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">cc_x</span><span class="p">,</span> <span class="n">rsphere</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">)</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="mi">81</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">])</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">ori</span><span class="o">.</span><span class="n">stars</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+<span class="n">patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.patches.Circle at 0x7f0f08e04490&gt;
+</pre></div>
+</div>
+<img alt="_images/projections_10_1.png" src="_images/projections_10_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span><span class="p">)</span> <span class="o">=</span> <span class="n">ori</span><span class="o">.</span><span class="n">circumcenter</span>
+<span class="n">cc_x</span> <span class="o">=</span> <span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span>
+<span class="n">cc_y</span> <span class="o">=</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span>
+<span class="n">width</span><span class="o">=</span><span class="n">r2m</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="o">.</span><span class="n">radians</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">frameon</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;aeqd&#39;</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">cc_y</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">cc_x</span><span class="p">,</span> <span class="n">rsphere</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">)</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="mi">81</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">])</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span><span class="bp">False</span><span class="p">,</span><span class="bp">True</span><span class="p">,</span><span class="bp">True</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">ori</span><span class="o">.</span><span class="n">stars</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+<span class="n">border0</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">border1</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">width</span><span class="o">*.</span><span class="mi">51</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">border0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">border1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.patches.Circle at 0x7f0f08e94990&gt;
+</pre></div>
+</div>
+<img alt="_images/projections_11_1.png" src="_images/projections_11_1.png" />
+<p>I dont think clip paths get rid of grid lines(?) and I suppose I could
+make a filled contour for the outside of the border, but I&#8217;d rather
+leave it transparent. The immediate solution I see is to just make the
+lines myself.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>%pylab inline
+import asterisms as a
+orion_segs = &#39;26727 26311 26311 25930 28691 29426 29426 29038 29038 27913 27913 28691 29239 28614 28614 27989 27989 26727 26727 27366 24436 25281 25281 25930 25930 25336 25336 25813 25813 26207 25813 27989 25336 22449 22449 22549 22549 22797 22797 23123 22449 22509 22509 22845 22845 22833&#39;
+ori = a.Constellation(name=&#39;Orion&#39;,name_alt=&#39;The Hunter&#39;,abbrev=&#39;ORI&#39;,segs=orion_segs)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+&#39;22549&#39;
+&#39;25336&#39;
+&#39;22449&#39;
+&#39;22797&#39;
+&#39;27913&#39;
+&#39;22509&#39;
+&#39;23123&#39;
+&#39;25281&#39;
+&#39;29239&#39;
+&#39;26727&#39;
+&#39;22833&#39;
+&#39;27366&#39;
+&#39;26311&#39;
+&#39;29038&#39;
+&#39;29426&#39;
+&#39;24436&#39;
+&#39;28691&#39;
+&#39;27989&#39;
+&#39;26207&#39;
+&#39;22845&#39;
+&#39;25813&#39;
+&#39;25930&#39;
+&#39;28614&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">patches</span>
+
+<span class="n">R_EARTH</span> <span class="o">=</span> <span class="mf">6370997.0</span> <span class="c">#default is arithmetic mean radius of the earth, force this value for sanity or if want to use a different value.</span>
+
+<span class="k">def</span> <span class="nf">r2m</span><span class="p">(</span><span class="n">radians</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Converts radians to meters using the arithmetic mean radius of the earth.</span>
+
+<span class="sd">    The default Basemap sphere radius is 6370997 meters. See `rsphere &lt;http://matplotlib.org/basemap/api/basemap_api.html&gt;`_</span>
+
+<span class="sd">    This is *only* intended as a helper for the Basemap functions which take widths in meters.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">radians</span><span class="o">*</span><span class="n">radius</span>
+
+<span class="p">(</span><span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span><span class="p">)</span> <span class="o">=</span> <span class="n">ori</span><span class="o">.</span><span class="n">circumcenter</span>
+<span class="n">cc_x</span> <span class="o">=</span> <span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span>
+<span class="n">cc_y</span> <span class="o">=</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span>
+<span class="n">width</span><span class="o">=</span><span class="n">r2m</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="o">.</span><span class="n">radians</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+<span class="c">#---------</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s">&#39;{0} - {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">ori</span><span class="o">.</span><span class="n">name_alt</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">frameon</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;aeqd&#39;</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">cc_y</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">cc_x</span><span class="p">,</span> <span class="n">rsphere</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">ori</span><span class="o">.</span><span class="n">stars</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="n">border0</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">border1</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">width</span><span class="o">*.</span><span class="mi">51</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">border0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">border1</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="c"># dashes = [100,.0001]</span>
+<span class="c"># bm.drawparallels(np.arange(-80,81,5),clip_path=border0, linewidth=2, color=&#39;b&#39;, dashes=dashes)</span>
+<span class="c"># bm.drawparallels(np.arange(-80,81,10), labels=[True,True,False,False],clip_path=border0, linewidth=5, dashes=dashes)</span>
+<span class="c"># bm.drawmeridians(np.arange(-180,180,10), labels=[False,False,True,True],clip_path=border0,dashes=dashes)</span>
+<span class="c">#---------</span>
+<span class="c"># Will make a grid function here if need to</span>
+<span class="k">def</span> <span class="nf">draw_grid</span><span class="p">(</span><span class="n">lat_maj</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">lat_min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">lon_maj</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">lon_min</span><span class="o">=</span><span class="mi">5</span><span class="p">,):</span>
+    <span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">x2</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">clip_path</span><span class="o">=</span><span class="n">border0</span><span class="p">)</span>
+<span class="n">draw_grid</span><span class="p">()</span>
+<span class="c">#---------</span>
+<span class="c">#savefig(&#39;clipping_example.png&#39;)</span>
+</pre></div>
+</div>
+<img alt="_images/projections_14_0.png" src="_images/projections_14_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+<span class="kn">from</span> <span class="nn">matplotlib.font_manager</span> <span class="kn">import</span> <span class="n">FontProperties</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">patches</span>
+<span class="c"># from matplotlib import rc</span>
+<span class="c"># rc(&#39;text&#39;,usetex=True)</span>
+
+<span class="n">R_EARTH</span> <span class="o">=</span> <span class="mf">6370997.0</span> <span class="c">#default is arithmetic mean radius of the earth, force this value for sanity or if want to use a different value.</span>
+
+<span class="k">def</span> <span class="nf">r2m</span><span class="p">(</span><span class="n">radians</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Converts radians to meters using the arithmetic mean radius of the earth.</span>
+
+<span class="sd">    The default Basemap sphere radius is 6370997 meters. See `rsphere &lt;http://matplotlib.org/basemap/api/basemap_api.html&gt;`_</span>
+
+<span class="sd">    This is *only* intended as a helper for the Basemap functions which take widths in meters.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">radians</span><span class="o">*</span><span class="n">radius</span>
+
+<span class="p">(</span><span class="n">cc_ra</span><span class="p">,</span> <span class="n">cc_dec</span><span class="p">)</span> <span class="o">=</span> <span class="n">ori</span><span class="o">.</span><span class="n">circumcenter</span>
+<span class="n">cc_x</span> <span class="o">=</span> <span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span>
+<span class="n">cc_y</span> <span class="o">=</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span>
+<span class="n">width</span><span class="o">=</span><span class="n">r2m</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="o">.</span><span class="n">radians</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+<span class="c">#---------</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">frameon</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;aeqd&#39;</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">cc_y</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">cc_x</span><span class="p">,</span> <span class="n">rsphere</span><span class="o">=</span><span class="n">R_EARTH</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="n">font_title</span> <span class="o">=</span> <span class="n">FontProperties</span><span class="p">()</span>
+<span class="n">font_title</span><span class="o">.</span><span class="n">set_family</span><span class="p">([</span><span class="s">&#39;cursive&#39;</span><span class="p">,</span><span class="s">&#39;serif&#39;</span><span class="p">])</span>
+<span class="n">font_title</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="s">&#39;large&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span><span class="n">fontproperties</span><span class="o">=</span><span class="n">font_title</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">ori</span><span class="o">.</span><span class="n">name_alt</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">fontproperties</span><span class="o">=</span><span class="n">font_title</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="n">font_star</span> <span class="o">=</span> <span class="n">FontProperties</span><span class="p">()</span>
+<span class="n">font_star</span><span class="o">.</span><span class="n">set_family</span><span class="p">([</span><span class="s">&#39;monospace&#39;</span><span class="p">])</span>
+<span class="n">font_star</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="s">&#39;medium&#39;</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="k">for</span> <span class="n">star</span> <span class="ow">in</span> <span class="n">ori</span><span class="o">.</span><span class="n">stars</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">star</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">star</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">star</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">fontproperties</span><span class="o">=</span><span class="n">font_star</span><span class="p">)</span>
+    <span class="c">#ax.text(x,y, r&#39;$E=mc^2$&#39;, fontsize=15)# can use LaTeX for Bayer designations</span>
+    <span class="c">#ax.text(x,y,u&#39;Άλφα&#39;) #or unicode</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#111111&#39;</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">cc_ra</span><span class="o">.</span><span class="n">_degrees</span><span class="p">,</span> <span class="n">cc_dec</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="n">border0</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">border1</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">circle_x</span><span class="p">,</span><span class="n">circle_y</span><span class="p">),</span><span class="n">radius</span><span class="o">=</span><span class="n">width</span><span class="o">*.</span><span class="mi">51</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">border0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">border1</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="k">def</span> <span class="nf">draw_grid</span><span class="p">(</span><span class="n">lat_maj</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">lat_min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">lon_maj</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">lon_min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">disp_maj</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">disp_min</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;set major grid with lat_maj, lon_maj.</span>
+
+<span class="sd">    set minor grid with lat_min, lon_min.</span>
+
+<span class="sd">    display major and minor grids with disp_maj, disp_min.&#39;&#39;&#39;</span>
+
+    <span class="c">#lats = np.arange(-80,81,lat_maj)</span>
+    <span class="c">#lons = np.arange(-180,180,lon_maj)</span>
+
+    <span class="n">lats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="n">lat_min</span><span class="p">)</span>
+    <span class="n">lons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="n">lon_min</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">lat</span> <span class="ow">in</span> <span class="n">lats</span><span class="p">:</span>
+        <span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">lons</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">lat</span><span class="p">)</span>
+        <span class="n">x2</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">lons</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">lat</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">clip_path</span><span class="o">=</span><span class="n">border0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">lon</span> <span class="ow">in</span> <span class="n">lons</span><span class="p">:</span>
+        <span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="n">lats</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x2</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="n">bm</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="n">lats</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">clip_path</span><span class="o">=</span><span class="n">border0</span><span class="p">)</span>
+    <span class="c">#plt.plot([x1, x2], [y1, y2], &#39;blue&#39;, lw=300)#,clip_path=border0)</span>
+
+<span class="n">draw_grid</span><span class="p">(</span><span class="n">disp_min</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c">#---------</span>
+<span class="c">#savefig(&#39;clipping_example.png&#39;)</span>
+</pre></div>
+</div>
+<img alt="_images/projections_15_0.png" src="_images/projections_15_0.png" />
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-44642246-12', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+</body>
+</html>

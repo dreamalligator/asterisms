@@ -44,20 +44,26 @@
 </div>
 </dd></dl>
 
-<dl class="function">
-<dt id="asterisms.asterism">
-<tt class="descclassname">asterisms.</tt><tt class="descname">asterism</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/asterisms.html#asterism"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.asterism" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the asterism database and return an asterism.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="asterisms.star">
-<tt class="descclassname">asterisms.</tt><tt class="descname">star</tt><big>(</big><em>name</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/asterisms.html#star"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.star" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the mini star database and return a star.</p>
-</dd></dl>
-
 <div class="section" id="module-asterisms.geometry">
 <span id="asterisms-geometry"></span><h2>asterisms.geometry<a class="headerlink" href="#module-asterisms.geometry" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asterisms.geometry.Minidisk">
+<em class="property">class </em><tt class="descclassname">asterisms.geometry.</tt><tt class="descname">Minidisk</tt><big>(</big><em>*args</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/asterisms/geometry.html#Minidisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.geometry.Minidisk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate smallest enclosing disk. This computes the smallest enclosing disk of a set of n points in the plane in expected O(n) time.</p>
+<p>Given a set P of n points.</p>
+<p>Returns the closed disk of smallest radius containning all points in P. The values returned are a tuple of center, and the radius.</p>
+<p>The algorithm used is based on Emo Welzl&#8217;s paper <a class="footnote-reference" href="#id2" id="id1">[1]</a> which solves this problem in O(n) time. See <a class="reference external" href="https://en.wikipedia.org/wiki/Smallest-circle_problem">smallest-circle problem</a>.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Welzl, Emo (1991), &#8220;<a class="reference external" href="http://dx.doi.org/10.1007%2FBFb0038202">Smallest enclosing disks (balls and ellipsoids)</a>&#8221;, in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370</td></tr>
+</tbody>
+</table>
+<p>A functionality I added is that you can initialize a minidisk with <em>both</em> a center, radius <em>and</em> a list of points. The reason for this is if you wanted to start off with a circle, but expand it to include the extra points using Welzl&#8217;s algorithm.</p>
+<p>If simply passed a center and radius, with no points, then this is just a circle and nothing is computed. It will return the center and radius. If not an Angle, then forced to float type.</p>
+<p>If passed only a list of positions, then the minimum enclosing circle is computed using Welzl&#8217;s algorithm.</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="asterisms.geometry.center">
 <tt class="descclassname">asterisms.geometry.</tt><tt class="descname">center</tt><big>(</big><em>positions</em><big>)</big><a class="reference internal" href="_modules/asterisms/geometry.html#center"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.geometry.center" title="Permalink to this definition">¶</a></dt>
@@ -106,13 +112,23 @@ type Angle.</p>
 <p>Given a list of position tuples, <tt class="docutils literal"><span class="pre">[(ra0,</span> <span class="pre">dec0),</span> <span class="pre">(ra1,</span> <span class="pre">dec1)]</span></tt> or a list of Stars.</p>
 <p>Returns a position tuple of right ascension and declination <tt class="docutils literal"><span class="pre">(ra,dec)</span></tt>.</p>
 <p>This may be useful for automatically centering a telescope or for a program that automatically zooms to a location.</p>
-<p>The algorithm used is based on Emo Welzl&#8217;s paper <a class="footnote-reference" href="#id2" id="id1">[1]</a> which solves this problem in O(n) time. See <a class="reference external" href="https://en.wikipedia.org/wiki/Smallest-circle_problem">smallest-circle problem</a>.</p>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
+<p>The algorithm used is based on Emo Welzl&#8217;s paper <a class="footnote-reference" href="#id5" id="id3">[2]</a> which solves this problem in O(n) time. See <a class="reference external" href="https://en.wikipedia.org/wiki/Smallest-circle_problem">smallest-circle problem</a>.</p>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Welzl, Emo (1991), &#8220;<a class="reference external" href="http://dx.doi.org/10.1007%2FBFb0038202">Smallest enclosing disks (balls and ellipsoids)</a>&#8221;, in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>Welzl, Emo (1991), &#8220;<a class="reference external" href="http://dx.doi.org/10.1007%2FBFb0038202">Smallest enclosing disks (balls and ellipsoids)</a>&#8221;, in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370</td></tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="asterisms.geometry.make_circle">
+<tt class="descclassname">asterisms.geometry.</tt><tt class="descname">make_circle</tt><big>(</big><em>points</em><big>)</big><a class="reference internal" href="_modules/asterisms/geometry.html#make_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.geometry.make_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data conventions: A point is a pair of floats (x, y). A circle is a triple of floats (center x, center y, radius).</p>
+<p>Returns the smallest circle that encloses all the given points. Runs in expected O(n) time, randomized.
+Input: A sequence of pairs of floats or ints, e.g. [(0,5), (3.1,-2.7)].
+Output: A triple of floats representing a circle.
+Note: If 0 points are given, None is returned. If 1 point is given, a circle of radius 0 is returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -125,21 +141,6 @@ type Angle. Distance is Skyfield type Distance, in AU units.</p>
 <p>If dist is included, the returned tuple is (Mid_RA, Mid_Dec, Mid_Dist).
 Otherwise, it is (Mid_RA, Mid_Dec).</p>
 <p>You can alternatively use <tt class="docutils literal"><span class="pre">center</span></tt> for multiple points.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="asterisms.geometry.minidisk">
-<tt class="descclassname">asterisms.geometry.</tt><tt class="descname">minidisk</tt><big>(</big><em>P</em><big>)</big><a class="reference internal" href="_modules/asterisms/geometry.html#minidisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#asterisms.geometry.minidisk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate smallest enclosing disk. This computes the smallest enclosing disk of a set of n points in the plane in expected O(n) time.</p>
-<p>Given a set P of n points.</p>
-<p>Returns the closed disk of smallest radius containning all points in P. The values returned are a tuple of center, and the radius.</p>
-<p>The algorithm used is based on Emo Welzl&#8217;s paper <a class="footnote-reference" href="#id5" id="id3">[2]</a> which solves this problem in O(n) time. See <a class="reference external" href="https://en.wikipedia.org/wiki/Smallest-circle_problem">smallest-circle problem</a>.</p>
-<table class="docutils footnote" frame="void" id="id5" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>Welzl, Emo (1991), &#8220;<a class="reference external" href="http://dx.doi.org/10.1007%2FBFb0038202">Smallest enclosing disks (balls and ellipsoids)</a>&#8221;, in Maurer, H., New Results and New Trends in Computer Science, Lecture Notes in Computer Science 555, Springer-Verlag, pp. 359-370</td></tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>

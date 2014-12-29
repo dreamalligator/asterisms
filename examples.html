@@ -144,13 +144,16 @@ files.</p>
 <span class="n">uma</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Ursa Major&#39;</span><span class="p">,</span><span class="n">name_alt</span><span class="o">=</span><span class="s">&#39;Big Dipper&#39;</span><span class="p">,</span><span class="n">abbrev</span><span class="o">=</span><span class="s">&#39;UMA&#39;</span><span class="p">,</span><span class="n">segs</span><span class="o">=</span><span class="n">segs</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;65378&#39;</span>
-<span class="s">&#39;53910&#39;</span>
-<span class="s">&#39;67301&#39;</span>
-<span class="s">&#39;58001&#39;</span>
-<span class="s">&#39;59774&#39;</span>
-<span class="s">&#39;62956&#39;</span>
-<span class="s">&#39;54061&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre>&#39;65378&#39;
+&#39;53910&#39;
+&#39;67301&#39;
+&#39;58001&#39;
+&#39;59774&#39;
+&#39;62956&#39;
+&#39;54061&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
 </pre></div>
 </div>
 <div class="section" id="constellation-properties">
@@ -179,18 +182,192 @@ inititializes a list of stars by using Skyfield&#8217;s
 method. It also passes these stars along and calculates the visual
 (unweighted) center of the constellation. By this, it is meant that it
 is the mean position. This is a tuple of right ascension and declination
-in Skyfield&#8217;s Angle type.</p>
+in Skyfield&#8217;s Angle type. It also calculates the <tt class="docutils literal"><span class="pre">circumcenter</span></tt>, or
+better described as the <em>minimum enclosing disk</em> of all of the stars.
+The algorithm it follows is based on Emo Welzl&#8217;s paper which solves this
+problem in O(n) time.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">stars</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
-<span class="c">#TODO: circumcenter not finished yet.</span>
-<span class="c">#print(uma.circumcenter)</span>
-<span class="c">#print(uma.circumcenter_radius)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>[Star(ra_hours=13.398761920264775, dec_degrees=54.925361752393151, ra_mas_per_year=121.23, dec_mas_per_year=-22.01, parallax_mas=41.73, names=[(&#39;HIP&#39;, 65378)]), Star(ra_hours=11.030687999605183, dec_degrees=56.382426786427374, ra_mas_per_year=81.66, dec_mas_per_year=33.74, parallax_mas=41.07, names=[(&#39;HIP&#39;, 53910)]), Star(ra_hours=13.792343787984251, dec_degrees=49.313265059674272, ra_mas_per_year=-121.23, dec_mas_per_year=-15.56, parallax_mas=32.39, names=[(&#39;HIP&#39;, 67301)]), Star(ra_hours=11.897179848125406, dec_degrees=53.694760084185191, ra_mas_per_year=107.76, dec_mas_per_year=11.16, parallax_mas=38.99, names=[(&#39;HIP&#39;, 58001)]), Star(ra_hours=12.257100034120432, dec_degrees=57.032616901786447, ra_mas_per_year=103.56, dec_mas_per_year=7.81, parallax_mas=40.05, names=[(&#39;HIP&#39;, 59774)]), Star(ra_hours=12.900485951888628, dec_degrees=55.959821158352696, ra_mas_per_year=111.74, dec_mas_per_year=-8.99, parallax_mas=40.3, names=[(&#39;HIP&#39;, 62956)]), Star(ra_hours=11.062130192490219, dec_degrees=61.75103320112995, ra_mas_per_year=-136.46, dec_mas_per_year=-35.25, parallax_mas=26.38, names=[(&#39;HIP&#39;, 54061)])]
 (&lt;Angle 12h 20m 02.75s&gt;, &lt;Angle +55deg 34&#39; 47.6&quot;&gt;)
+(&lt;Angle 12h 25m 38.05s&gt;, &lt;Angle +55deg 31&#39; 55.7&quot;&gt;)
+21deg 24&#39; 00.5&quot;
 </pre></div>
 </div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - No Stars</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>WARNING: This instance was not created with any points to be fed to Welzl&#39;s algorithm. If initialized with a center and radius, it will return the same circle with float types. If not, then it will return a bare circle, with no center and a radius of zero.
+((None, None), &lt;Angle 00deg 00&#39; 00.0&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - No Stars, fed initial circle</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">(</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">radius</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>WARNING: This instance was not created with any points to be fed to Welzl&#39;s algorithm. If initialized with a center and radius, it will return the same circle with float types. If not, then it will return a bare circle, with no center and a radius of zero.
+((0.5, 2.0), 5.0)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - Single Star</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="n">single_star</span> <span class="o">=</span> <span class="p">[</span><span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;59774&#39;</span><span class="p">)]</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="n">single_star</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;59774&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+((&lt;Angle 12h 15m 25.56s&gt;, &lt;Angle +57deg 01&#39; 57.4&quot;&gt;), &lt;Angle 00deg 00&#39; 00.0&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - Two Stars</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="n">two_stars</span> <span class="o">=</span> <span class="p">[</span><span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;59774&#39;</span><span class="p">),</span><span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;54061&#39;</span><span class="p">)]</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="n">two_stars</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;59774&#39;
+&#39;54061&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+((&lt;Angle 11h 39m 34.61s&gt;, &lt;Angle +59deg 23&#39; 30.6&quot;&gt;), &lt;Angle 09deg 16&#39; 03.3&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - Two Positions</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>type is &lt;type &#39;int&#39;&gt;
+make circle got type &lt;type &#39;tuple&#39;&gt;
+yes! star
+((&lt;Angle 11h 27m 32.96s&gt;, &lt;Angle +229deg 10&#39; 59.2&quot;&gt;), &lt;Angle 286deg 28&#39; 44.0&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - Two Positions in Angle type</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="n">s0</span> <span class="o">=</span> <span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;59774&#39;</span><span class="p">)</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;54061&#39;</span><span class="p">)</span>
+<span class="n">p0</span> <span class="o">=</span> <span class="p">(</span><span class="n">s0</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span> <span class="n">s0</span><span class="o">.</span><span class="n">dec</span><span class="p">)</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span> <span class="n">s1</span><span class="o">.</span><span class="n">dec</span><span class="p">)</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;59774&#39;
+&#39;54061&#39;
+type is &lt;class &#39;skyfield.units.Angle&#39;&gt;
+make circle got type &lt;type &#39;tuple&#39;&gt;
+yes! star
+((&lt;Angle 11h 39m 34.61s&gt;, &lt;Angle +174deg 53&#39; 39.2&quot;&gt;), &lt;Angle 12deg 40&#39; 28.4&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - Three Stars</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="kn">from</span> <span class="nn">skyfield.data</span> <span class="kn">import</span> <span class="n">hipparcos</span>
+<span class="n">three_stars</span> <span class="o">=</span> <span class="p">[</span><span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;59774&#39;</span><span class="p">),</span><span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;54061&#39;</span><span class="p">),</span><span class="n">hipparcos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;53910&#39;</span><span class="p">)]</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="n">three_stars</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;59774&#39;
+&#39;54061&#39;
+&#39;53910&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+((&lt;Angle 11h 38m 24.64s&gt;, &lt;Angle +58deg 17&#39; 03.4&quot;&gt;), &lt;Angle 09deg 20&#39; 17.1&quot;&gt;)
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Minimum enclosing disk test - A whole constellation</span>
+<span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
+<span class="kn">from</span> <span class="nn">asterisms.geometry</span> <span class="kn">import</span> <span class="n">Minidisk</span>
+<span class="n">segs</span> <span class="o">=</span> <span class="s">&#39;67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774&#39;</span>
+<span class="n">uma</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Ursa Major&#39;</span><span class="p">,</span><span class="n">name_alt</span><span class="o">=</span><span class="s">&#39;Big Dipper&#39;</span><span class="p">,</span><span class="n">abbrev</span><span class="o">=</span><span class="s">&#39;UMA&#39;</span><span class="p">,</span><span class="n">segs</span><span class="o">=</span><span class="n">segs</span><span class="p">)</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">Minidisk</span><span class="p">(</span><span class="n">points</span> <span class="o">=</span> <span class="n">uma</span><span class="o">.</span><span class="n">stars</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">md</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;65378&#39;
+&#39;53910&#39;
+&#39;67301&#39;
+&#39;58001&#39;
+&#39;59774&#39;
+&#39;62956&#39;
+&#39;54061&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+((&lt;Angle 12h 25m 38.05s&gt;, &lt;Angle +55deg 31&#39; 55.7&quot;&gt;), &lt;Angle 21deg 24&#39; 00.5&quot;&gt;)
+</pre></div>
+</div>
+<p>We see that the value is the same for Constellation.circumcenter
+calculated uses this Minidisk function.</p>
+<div class="code python highlight-python"><div class="highlight"><pre>%pylab inline
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Populating the interactive namespace from numpy and matplotlib
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">asterisms</span> <span class="kn">as</span> <span class="nn">a</span>
+<span class="n">segs</span> <span class="o">=</span> <span class="s">&#39;67301 65378 65378 62956 62956 59774 59774 54061 54061 53910 53910 58001 58001 59774&#39;</span>
+<span class="n">uma</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Constellation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Ursa Major&#39;</span><span class="p">,</span><span class="n">name_alt</span><span class="o">=</span><span class="s">&#39;Big Dipper&#39;</span><span class="p">,</span><span class="n">abbrev</span><span class="o">=</span><span class="s">&#39;UMA&#39;</span><span class="p">,</span><span class="n">segs</span><span class="o">=</span><span class="n">segs</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">,</span> <span class="n">uma</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&#39;65378&#39;
+&#39;53910&#39;
+&#39;67301&#39;
+&#39;58001&#39;
+&#39;59774&#39;
+&#39;62956&#39;
+&#39;54061&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
+((&lt;Angle 12h 25m 38.05s&gt;, &lt;Angle +55deg 31&#39; 55.7&quot;&gt;), &lt;Angle 21deg 24&#39; 00.5&quot;&gt;)
+</pre></div>
+</div>
+<p>You can plot circles in the non-equirectangular projections, but I don&#8217;t
+recommend it, because it is very distorted. Below we see the Big Dipper
+in blue, and the circumcenter in red. The circle plotted is the minimum
+enclosing disk calculated using Welzl&#8217;s algorithm. This could be useful
+for automatically zooming a telescope to a constellation, while ensuring
+that the whole constellation is visible.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">asterisms.cartography</span> <span class="kn">import</span> <span class="n">init_plot</span><span class="p">,</span> <span class="n">plot</span><span class="p">,</span> <span class="n">plot_circle</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">init_plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">uma</span><span class="o">.</span><span class="n">stars</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">([</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">],</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">plot_circle</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">uma</span><span class="o">.</span><span class="n">circumcenter_radius</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.patches.Circle at 0x7f6000ada410&gt;
+</pre></div>
+</div>
+<img alt="_images/examples_28_1.png" src="_images/examples_28_1.png" />
 </div>
 <div class="section" id="cartography">
 <h3>Cartography<a class="headerlink" href="#cartography" title="Permalink to this headline">¶</a></h3>
@@ -215,9 +392,16 @@ uma.plot(projection=&#39;lambert&#39;)
 &#39;59774&#39;
 &#39;62956&#39;
 &#39;54061&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
 </pre></div>
 </div>
-<img alt="_images/examples_17_1.png" src="_images/examples_17_1.png" />
+<pre class="literal-block">
+WARNING: pylab import has clobbered these variables: ['plot', 'f']
+<cite>%matplotlib</cite> prevents importing * from pylab and numpy
+</pre>
+<img alt="_images/examples_30_2.png" src="_images/examples_30_2.png" />
 <p>The default projection is a <a class="reference external" href="https://en.wikipedia.org/wiki/Mollweide_projection">Mollweide
 projection</a>. Here
 is an example with Orion.</p>
@@ -226,36 +410,39 @@ is an example with Orion.</p>
 <span class="n">ori</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;22549&#39;</span>
-<span class="s">&#39;25336&#39;</span>
-<span class="s">&#39;22449&#39;</span>
-<span class="s">&#39;22797&#39;</span>
-<span class="s">&#39;27913&#39;</span>
-<span class="s">&#39;22509&#39;</span>
-<span class="s">&#39;23123&#39;</span>
-<span class="s">&#39;25281&#39;</span>
-<span class="s">&#39;29239&#39;</span>
-<span class="s">&#39;26727&#39;</span>
-<span class="s">&#39;22833&#39;</span>
-<span class="s">&#39;27366&#39;</span>
-<span class="s">&#39;26311&#39;</span>
-<span class="s">&#39;29038&#39;</span>
-<span class="s">&#39;29426&#39;</span>
-<span class="s">&#39;24436&#39;</span>
-<span class="s">&#39;28691&#39;</span>
-<span class="s">&#39;27989&#39;</span>
-<span class="s">&#39;26207&#39;</span>
-<span class="s">&#39;22845&#39;</span>
-<span class="s">&#39;25813&#39;</span>
-<span class="s">&#39;25930&#39;</span>
-<span class="s">&#39;28614&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre>&#39;22549&#39;
+&#39;25336&#39;
+&#39;22449&#39;
+&#39;22797&#39;
+&#39;27913&#39;
+&#39;22509&#39;
+&#39;23123&#39;
+&#39;25281&#39;
+&#39;29239&#39;
+&#39;26727&#39;
+&#39;22833&#39;
+&#39;27366&#39;
+&#39;26311&#39;
+&#39;29038&#39;
+&#39;29426&#39;
+&#39;24436&#39;
+&#39;28691&#39;
+&#39;27989&#39;
+&#39;26207&#39;
+&#39;22845&#39;
+&#39;25813&#39;
+&#39;25930&#39;
+&#39;28614&#39;
+type is &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+make circle got type &lt;class &#39;skyfield.starlib.Star&#39;&gt;
+yes! star
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>/usr/lib/pymodules/python2.7/matplotlib/projections/geo.py:485: RuntimeWarning: invalid value encountered in arcsin
   theta = np.arcsin(y / np.sqrt(2))
 </pre></div>
 </div>
-<img alt="_images/examples_19_2.png" src="_images/examples_19_2.png" />
+<img alt="_images/examples_32_2.png" src="_images/examples_32_2.png" />
 </div>
 </div>
 <div class="section" id="precession">
@@ -270,6 +457,9 @@ where I&#8217;ve posted on it.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">vondrak</span> <span class="kn">as</span> <span class="nn">v</span>
 <span class="k">print</span><span class="p">(</span><span class="s">&#39;using Vondrak version </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">v</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 <span class="c">#TODO</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>using Vondrak version 0.03
 </pre></div>
 </div>
 </div>
