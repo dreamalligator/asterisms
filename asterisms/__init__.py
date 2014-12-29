@@ -58,14 +58,3 @@ class Boundary():
     def __repr__(self):
         """Return a useful textual representation of this Boundary."""
         return('<asterism.Boundary>')
-
-# expand/minimize database
-# query Hipparcos catalog
-# query other catalogs
-# plot helper functions
-# interpolation
-# all plot types equirectangular, polar etc
-# create new asterism
-# delete asterism
-# reset database to original
-# bibtex, cite references in a separate database

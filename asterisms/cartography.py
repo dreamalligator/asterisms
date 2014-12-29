@@ -15,10 +15,6 @@ def plot(stars, ax=None, g=True, title=None, projection='mollweide', color='blue
 
     Returns plot.
     '''
-    #TODO PROJECTIONS
-    #* https://en.wikipedia.org/wiki/Lambert_conformal_conic_projection
-    #* https://en.wikipedia.org/wiki/Lambert_cylindrical_equal-area_projection
-    #* https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection
 
     if(not isinstance(stars, list)):
         raise ValueError('Must be passed a list of Stars or a list of position tuples.')

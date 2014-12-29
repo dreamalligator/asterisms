@@ -23,6 +23,7 @@ Contents
    installation
    about
    examples
+   projections
    api
 
 .. include:: about.rst

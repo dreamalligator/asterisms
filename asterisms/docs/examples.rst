@@ -177,6 +177,9 @@ files.
     '59774'
     '62956'
     '54061'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
 
 
 Constellation Properties
@@ -210,7 +213,10 @@ inititializes a list of stars by using Skyfield's
 method. It also passes these stars along and calculates the visual
 (unweighted) center of the constellation. By this, it is meant that it
 is the mean position. This is a tuple of right ascension and declination
-in Skyfield's Angle type.
+in Skyfield's Angle type. It also calculates the ``circumcenter``, or
+better described as the *minimum enclosing disk* of all of the stars.
+The algorithm it follows is based on Emo Welzl's paper which solves this
+problem in O(n) time.
 
 .. code:: python
 
@@ -236,7 +242,21 @@ in Skyfield's Angle type.
 
 .. parsed-literal::
 
+    WARNING: This instance was not created with any points to be fed to Welzl's algorithm. If initialized with a center and radius, it will return the same circle with float types. If not, then it will return a bare circle, with no center and a radius of zero.
     ((None, None), <Angle 00deg 00' 00.0">)
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - No Stars, fed initial circle
+    from asterisms.geometry import Minidisk
+    md = Minidisk(center = (0.5,2), radius = 5)
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    WARNING: This instance was not created with any points to be fed to Welzl's algorithm. If initialized with a center and radius, it will return the same circle with float types. If not, then it will return a bare circle, with no center and a radius of zero.
+    ((0.5, 2.0), 5.0)
 
 
 .. code:: python
@@ -251,6 +271,9 @@ in Skyfield's Angle type.
 .. parsed-literal::
 
     '59774'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
     ((<Angle 12h 15m 25.56s>, <Angle +57deg 01' 57.4">), <Angle 00deg 00' 00.0">)
 
 
@@ -267,7 +290,47 @@ in Skyfield's Angle type.
 
     '59774'
     '54061'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
     ((<Angle 11h 39m 34.61s>, <Angle +59deg 23' 30.6">), <Angle 09deg 16' 03.3">)
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - Two Positions
+    from asterisms.geometry import Minidisk
+    md = Minidisk(points = [(0,0),(6,8)])
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    type is <type 'int'>
+    make circle got type <type 'tuple'>
+    yes! star
+    ((<Angle 11h 27m 32.96s>, <Angle +229deg 10' 59.2">), <Angle 286deg 28' 44.0">)
+
+
+.. code:: python
+
+    # Minimum enclosing disk test - Two Positions in Angle type
+    from asterisms.geometry import Minidisk
+    from skyfield.data import hipparcos
+    s0 = hipparcos.get('59774')
+    s1 = hipparcos.get('54061')
+    p0 = (s0.ra, s0.dec)
+    p1 = (s1.ra, s1.dec)
+    md = Minidisk(points = [p0, p1])
+    print(md.center, md.radius)
+
+.. parsed-literal::
+
+    '59774'
+    '54061'
+    type is <class 'skyfield.units.Angle'>
+    make circle got type <type 'tuple'>
+    yes! star
+    ((<Angle 11h 39m 34.61s>, <Angle +174deg 53' 39.2">), <Angle 12deg 40' 28.4">)
 
 
 .. code:: python
@@ -284,6 +347,9 @@ in Skyfield's Angle type.
     '59774'
     '54061'
     '53910'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
     ((<Angle 11h 38m 24.64s>, <Angle +58deg 17' 03.4">), <Angle 09deg 20' 17.1">)
 
 
@@ -306,6 +372,12 @@ in Skyfield's Angle type.
     '59774'
     '62956'
     '54061'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
     ((<Angle 12h 25m 38.05s>, <Angle +55deg 31' 55.7">), <Angle 21deg 24' 00.5">)
 
 
@@ -337,6 +409,9 @@ calculated uses this Minidisk function.
     '59774'
     '62956'
     '54061'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
     ((<Angle 12h 25m 38.05s>, <Angle +55deg 31' 55.7">), <Angle 21deg 24' 00.5">)
 
 
@@ -361,12 +436,12 @@ that the whole constellation is visible.
 
 .. parsed-literal::
 
-    <matplotlib.patches.Circle at 0x7f9bfcbfd390>
+    <matplotlib.patches.Circle at 0x7f6000ada410>
 
 
 
 
-.. image:: examples_files/examples_25_1.png
+.. image:: examples_files/examples_28_1.png
 
 
 Cartography
@@ -398,6 +473,9 @@ of the Big Dipper.
     '59774'
     '62956'
     '54061'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
 
 
 .. parsed-literal::
@@ -407,7 +485,7 @@ of the Big Dipper.
 
 
 
-.. image:: examples_files/examples_27_2.png
+.. image:: examples_files/examples_30_2.png
 
 
 The default projection is a `Mollweide
@@ -445,6 +523,9 @@ is an example with Orion.
     '25813'
     '25930'
     '28614'
+    type is <class 'skyfield.starlib.Star'>
+    make circle got type <class 'skyfield.starlib.Star'>
+    yes! star
 
 
 .. parsed-literal::
@@ -454,7 +535,7 @@ is an example with Orion.
 
 
 
-.. image:: examples_files/examples_29_2.png
+.. image:: examples_files/examples_32_2.png
 
 
 Precession
