@@ -6,3 +6,7 @@ hip2.dat*
 *pyc
 _build
 hip_main.dat.gz
+catalog.dat
+bound_18.dat
+bound_20.dat
+constbnd.dat

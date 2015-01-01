@@ -12,7 +12,7 @@ class Constellation(object):
 
     | `name` - the name of the constellation or asterism.
     | `abbrev` - abbreviation of the constellation.
-    | `name_alt` - endonym, colloquial name, or alternative name of constellation.
+    | `alt_name` - endonym, colloquial name, or alternative name of constellation.
     | `segs_n` - the number of segments that comprise the constellation.
     | `segs` - a list of star pairs that comprise segments.
     | `center` - a coordinate pair of the center of the constellation.
@@ -21,7 +21,7 @@ class Constellation(object):
     def __init__(self, *args, **kw):
         self.name = kw.pop('name', None)
         self.abbrev = kw.pop('abbrev', None)
-        self.name_alt = kw.pop('name_alt', None)
+        self.alt_name = kw.pop('alt_name', None)
         self.segs = kw.pop('segs', [])
         if(isinstance(self.segs, str)):
             self.segs = self.segs.split()
@@ -40,7 +40,7 @@ class Constellation(object):
 
     def __repr__(self):
         """Return a useful textual representation of this Constellation."""
-        return('<asterism.Constellation name=%s abbrev=%s name_alt=%s segs_n=%s center=%s circumcenter=%s circumcenter_radius=%s>' % (self.name, self.abbrev, self.name_alt, self.segs_n, self.center, self.circumcenter, self.circumcenter_radius))
+        return('<asterism.Constellation name=%s abbrev=%s alt_name=%s segs_n=%s center=%s circumcenter=%s circumcenter_radius=%s>' % (self.name, self.abbrev, self.alt_name, self.segs_n, self.center, self.circumcenter, self.circumcenter_radius))
 
 class Boundary():
     """A boundary for a constellation, asterism, or other celestial object.
