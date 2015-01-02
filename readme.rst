@@ -8,13 +8,13 @@
 
 For eons, man has looked up at the night sky. What did they see before 1922?
 
+**This project is still in the planning stages.**
+
 Documentation
 =============
 You can view the documentation at `digitalvapor.github.io/asterisms <https://digitalvapor.github.io/asterisms>`_.
 
-If you have any problems with installation, or would like to suggest an improvement, simply create an issue on the project's Github page:
-
-https://github.com/digitalvapor/asterisms
+If you have any problems with installation, or would like to suggest an improvement, simply create an issue on the project's Github page: https://github.com/digitalvapor/asterisms
 
 Dependencies
 ============
