@@ -47,14 +47,38 @@ class Boundary():
 
     A `Boundary` instance has the following attributes.
 
-    `name` - the name of the boundary
-    `points` - a list of celestial coordinate pairs in order for the border;
-               closed or unclosed acceptable
-    `area` - area of the celestial polygon
-    `center` - a coordinate pair of the center of the polygon
-    `epoch` - epoch that these coordinates were set by
-
+    | `name` - the name of the boundary.
+    | `abbrev` - an abbreviation of the boundary.
+    | `points` - a list of celestial coordinate pairs in order for the border; closed or unclosed acceptable.
+    | `area` - area of the celestial polygon.
+    | `center` - a coordinate pair of the center of the polygon.
+    | `data` - the raw input data for the boundary.
+    | `polygon` - a Shapely polygon made using the points.
     """
+
+    def __init__(self, *args, **kw):
+        self.name = kw.pop('name', None)
+        self.abbrev = kw.pop('abbrev', None)
+        self.points = kw.pop('points', None)
+        self.area = kw.pop('area', None)
+        self.center = kw.pop('center', None)
+        self.polygon = kw.pop('polygon', None)
+        self.data = kw.pop('data', None)
+        self.parse()
+
+    def parse(self, *args, **kw):
+        self.data = kw.pop('data', self.data)
+        if(self.data is None):
+            return
+        #self.points = iau2sky(self.data)
+        #self.polygon = pts2polygon(self.points)
+        #self.center =
+        #self.area =
+        return
+
+    def plot(self):
+        pass
+
     def __repr__(self):
         """Return a useful textual representation of this Boundary."""
         return('<asterism.Boundary>')

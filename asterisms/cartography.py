@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import skyfield
 
+COLOR = 'k'
+
 def init_plot(figsize=(8,6)):
     return plt.subplots(1,figsize=figsize)
 
@@ -53,3 +55,11 @@ def plot_circle(center=None, radius=None, ax=None, clip_on=True, alpha=1.0, face
     circle=plt.Circle(center, radius, clip_on=clip_on, facecolor=facecolor, alpha=alpha, edgecolor=edgecolor, lw=lw)
     my_plot = ax.add_artist(circle)
     return my_plot
+
+def plot_line(ax, ob):
+    x, y = ob.xy
+    ax.plot(x, y, color='k', linewidth=3, solid_capstyle='round', zorder=1)
+
+def plot_pt(ax, ob):
+    x, y = ob.xy
+    ax.plot(x, y, 'o',color='k', zorder=2)
